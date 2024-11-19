@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dq7hc5yhg1vou"]
+
+[ext_resource type="Material" uid="uid://ceo4x2jvjpqqx" path="res://materials/earthMaterial.tres" id="1_l2w78"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_1pxj5"]
+radius = 10.0
+height = 20.0
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Earth" type="Node3D" parent="."]
+
+[node name="EarthMesh" type="MeshInstance3D" parent="Earth"]
+material_override = ExtResource("1_l2w78")
+mesh = SubResource("SphereMesh_1pxj5")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.969906, 0.24348, 0, -0.24348, 0.969906, 0, 39.2222, 105.809)
