@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dq7hc5yhg1vou"]
+[gd_scene load_steps=8 format=3 uid="uid://dq7hc5yhg1vou"]
 
 [ext_resource type="Material" uid="uid://ceo4x2jvjpqqx" path="res://materials/earthMaterial.tres" id="1_l2w78"]
 [ext_resource type="Script" path="res://scenes/camera_movement.gd" id="2_0yhlv"]
@@ -6,13 +6,17 @@
 [ext_resource type="Material" uid="uid://efphtpl7eubk" path="res://materials/moonMaterial.tres" id="3_75sbf"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_1pxj5"]
-radius = 10.0
-height = 20.0
+radius = 20.0
+height = 40.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_faicv"]
 material = ExtResource("3_75sbf")
-radius = 5.0
-height = 10.0
+radius = 10.0
+height = 20.0
+
+[sub_resource type="Environment" id="Environment_ldj8n"]
+background_mode = 1
+background_color = Color(0.646029, 0.646029, 0.646029, 1)
 
 [node name="Node3D" type="Node3D"]
 
@@ -37,3 +41,6 @@ script = ExtResource("3_2xgwo")
 
 [node name="MoonMesh" type="MeshInstance3D" parent="Moon"]
 mesh = SubResource("SphereMesh_faicv")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ldj8n")
