@@ -55,6 +55,7 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta):
+	# Debug information
 	DebugDraw2D.set_text("X", global_position.x)
 	DebugDraw2D.set_text("Y", global_position.y)
 	DebugDraw2D.set_text("Z", global_position.z)
