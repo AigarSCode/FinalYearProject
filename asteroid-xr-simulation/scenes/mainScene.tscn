@@ -1,0 +1,46 @@
+[gd_scene load_steps=8 format=3 uid="uid://dq7hc5yhg1vou"]
+
+[ext_resource type="Material" uid="uid://ceo4x2jvjpqqx" path="res://materials/earthMaterial.tres" id="1_l2w78"]
+[ext_resource type="Script" path="res://scenes/camera_movement.gd" id="2_0yhlv"]
+[ext_resource type="Script" path="res://scenes/moon.gd" id="3_2xgwo"]
+[ext_resource type="Material" uid="uid://efphtpl7eubk" path="res://materials/moonMaterial.tres" id="3_75sbf"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_1pxj5"]
+radius = 20.0
+height = 40.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_faicv"]
+material = ExtResource("3_75sbf")
+radius = 10.0
+height = 20.0
+
+[sub_resource type="Environment" id="Environment_ldj8n"]
+background_mode = 1
+background_color = Color(0.646029, 0.646029, 0.646029, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Earth" type="Node3D" parent="."]
+
+[node name="EarthMesh" type="MeshInstance3D" parent="Earth"]
+material_override = ExtResource("1_l2w78")
+mesh = SubResource("SphereMesh_1pxj5")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.969906, 0.24348, 0, -0.24348, 0.969906, 0, 0, 250)
+script = ExtResource("2_0yhlv")
+sensitivity = 200.0
+speed = 50.0
+
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.948412, -1.38582e-08, 0.31704, -0.31704, -4.14564e-08, 0.948412, 1.03154e-16, -1, -4.37114e-08, 70.2282, 100, 0)
+
+[node name="Moon" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.7193, 0, 0)
+script = ExtResource("3_2xgwo")
+
+[node name="MoonMesh" type="MeshInstance3D" parent="Moon"]
+mesh = SubResource("SphereMesh_faicv")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ldj8n")
