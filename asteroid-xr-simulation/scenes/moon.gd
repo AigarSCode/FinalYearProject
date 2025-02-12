@@ -41,6 +41,17 @@ var i:int = 0
 var total_time:float = 0
 
 
+# API Key
+# DEMO_KEY for GitHub - Replace with actual key
+const api_key = "DEMO_KEY"
+
+# API URLs
+# NASA Asteroids - NeoWs
+var api_neows = "https://api.nasa.gov/neo/rest/v1/feed?api_key=" + api_key
+# NASA Horizons API
+var api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api"
+var api_horizons_test_url = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='301'&OBJ_DATA='YES'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='2024-10-31'&STOP_TIME='2024-11-30'&STEP_SIZE='1d'&QUANTITIES='1,9,20,23,24,29'"
+
 # Called when the node enters the scene tree for the first time.
 # Calculate and set staring position and calculate the target position
 func _ready() -> void:
@@ -48,6 +59,28 @@ func _ready() -> void:
 	global_position = start_pos
 	i += 1
 	target_pos = calculate_Target_Vector()
+	
+	# Get data from API 
+	var httprequest = HTTPRequest.new()
+	add_child(httprequest)
+	httprequest.request_completed.connect(self._http_request_completed)
+
+	var error = httprequest.request(api_neows)
+	print(error)
+	if error != OK:
+		print("Request Fail")
+	
+
+# Initial Testing of API
+func _http_request_completed(result, response_code, headers, body):
+	var json = JSON.new()
+	json.parse(body.get_string_from_utf8())
+	var response = json.get_data()
+	
+	print("***** START OF JSON RESPONSE *****")
+	print(response)
+	print("***** END OF JSON RESPONSE *****")
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -62,13 +95,14 @@ func _physics_process(delta):
 	DebugDraw2D.set_text("Elapsed Time", elapsed_time)
 	DebugDraw2D.set_text("Total elapsed time", total_time)
 	
+	
 	# Move the object to the target position from the starting position over 1 second
 	# Once moved to target, increase array index, set start position to current position, recalculate target and continue moving
 	if elapsed_time < simTimeFrame:
 		elapsed_time += delta
 		total_time += delta
 		var weight = elapsed_time / simTimeFrame
-		global_position = start_pos.lerp(target_pos, weight)
+		global_position = start_pos.slerp(target_pos, weight)
 	else:
 		if i < powX.size() - 2:
 			i += 1
