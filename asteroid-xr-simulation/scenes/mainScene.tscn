@@ -1,12 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://dq7hc5yhg1vou"]
+[gd_scene load_steps=10 format=3 uid="uid://dq7hc5yhg1vou"]
 
-[ext_resource type="Material" uid="uid://ceo4x2jvjpqqx" path="res://materials/earthMaterial.tres" id="1_l2w78"]
 [ext_resource type="Script" uid="uid://b64kcovck67ba" path="res://scenes/earth.gd" id="1_w16ng"]
 [ext_resource type="Script" uid="uid://c1igp6w7ysk7u" path="res://scenes/camera_movement.gd" id="2_0yhlv"]
+[ext_resource type="Texture2D" uid="uid://c0j17pybsxdhw" path="res://materials/8k_earth_daymap.jpg" id="2_w16ng"]
 [ext_resource type="Script" uid="uid://biueimr5aqr0x" path="res://scenes/moon.gd" id="3_2xgwo"]
 [ext_resource type="Material" uid="uid://efphtpl7eubk" path="res://materials/moonMaterial.tres" id="3_75sbf"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1jq6i"]
+albedo_texture = ExtResource("2_w16ng")
+
 [sub_resource type="SphereMesh" id="SphereMesh_1pxj5"]
+material = SubResource("StandardMaterial3D_1jq6i")
 radius = 20.0
 height = 40.0
 
@@ -25,7 +29,6 @@ background_color = Color(0.646029, 0.646029, 0.646029, 1)
 script = ExtResource("1_w16ng")
 
 [node name="EarthMesh" type="MeshInstance3D" parent="Earth"]
-material_override = ExtResource("1_l2w78")
 mesh = SubResource("SphereMesh_1pxj5")
 
 [node name="Camera3D" type="Camera3D" parent="."]

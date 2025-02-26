@@ -1,6 +1,11 @@
 extends Node3D
 
 var asteroidScene:Resource = preload("res://scenes/asteroidScene.tscn")
+# Asteroid Images from Solar System Scope (https://www.solarsystemscope.com/textures/)
+var asteroidTextures = [preload("res://materials/Asteroid Textures/4k_ceres_fictional.jpg"),
+						preload("res://materials/Asteroid Textures/4k_eris_fictional.jpg"),
+						preload("res://materials/Asteroid Textures/4k_haumea_fictional.jpg"),
+						preload("res://materials/Asteroid Textures/4k_makemake_fictional.jpg")]
 
 var neows_request = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2025-02-20&end_date=2025-02-20&detailed=false&api_key=DEMO_KEY"
 var api_response
@@ -47,6 +52,9 @@ func create_asteroids() -> void:
 		# Set Invisibile
 		asteroidInstance.get_node("AsteroidMesh").visible = false
 		
+		# Set a random asteroid texture
+		setAsteroidTexture(asteroidInstance)
+		
 		# Set 0,0,0 coordinates
 		asteroidInstance.position = Vector3(0,0,0)
 		
@@ -55,10 +63,17 @@ func create_asteroids() -> void:
 		asteroidInstance.asteroidNEoWsID = asteroid.neo_reference_id
 		asteroidInstance.asteroidName = asteroid.name
 		
-		#asteroidInstance.asteroidID = asteroidList[0].id
-		#asteroidInstance.asteroidNEoWsID = asteroidList[0].neo_reference_id
-		#asteroidInstance.asteroidName = asteroidList[0].name
-		
 		add_child(asteroidInstance)
 		
 		await get_tree().create_timer(0.5).timeout
+
+
+# Set a Random Texture to the asteroid instance
+func setAsteroidTexture(asteroidInstance) -> void:
+	var randomNum = randi_range(0, 3)
+	var mesh = asteroidInstance.get_node("AsteroidMesh")
+	
+	var asteroidMaterial = StandardMaterial3D.new()
+	asteroidMaterial.albedo_texture = asteroidTextures[randomNum]
+	
+	mesh.set_surface_override_material(0, asteroidMaterial)
