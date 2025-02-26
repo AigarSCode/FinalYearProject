@@ -48,6 +48,8 @@ const api_key = "DEMO_KEY"
 # API URLs
 # NASA Asteroids - NeoWs
 var api_neows = "https://api.nasa.gov/neo/rest/v1/feed?api_key=" + api_key
+var api_demo_neows = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2025-02-18&end_date=2025-02-18&detailed=false&api_key=DEMO_KEY"
+
 # NASA Horizons API
 var api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api"
 var api_horizons_test_url = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='301'&OBJ_DATA='YES'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='2024-10-31'&STOP_TIME='2024-11-30'&STEP_SIZE='1d'&QUANTITIES='1,9,20,23,24,29'"
@@ -60,26 +62,26 @@ func _ready() -> void:
 	i += 1
 	target_pos = calculate_Target_Vector()
 	
-	# Get data from API 
-	var httprequest = HTTPRequest.new()
-	add_child(httprequest)
-	httprequest.request_completed.connect(self._http_request_completed)
-
-	var error = httprequest.request(api_neows)
-	print(error)
-	if error != OK:
-		print("Request Fail")
+	## Get data from API 
+	#var httprequest = HTTPRequest.new()
+	#add_child(httprequest)
+	#httprequest.request_completed.connect(self._http_request_completed)
+#
+	#var error = httprequest.request(api_horizons_test_url)
+	#print(error)
+	#if error != OK:
+		#print("Request Fail")
 	
 
 # Initial Testing of API
-func _http_request_completed(result, response_code, headers, body):
-	var json = JSON.new()
-	json.parse(body.get_string_from_utf8())
-	var response = json.get_data()
-	
-	print("***** START OF JSON RESPONSE *****")
-	print(response)
-	print("***** END OF JSON RESPONSE *****")
+#func _http_request_completed(result, response_code, headers, body):
+	#var json = JSON.new()
+	#json.parse(body.get_string_from_utf8())
+	#var response = json.get_data()
+	#
+	#print("***** START OF JSON RESPONSE *****")
+	#print(response)
+	#print("***** END OF JSON RESPONSE *****")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -89,11 +91,11 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta):
 	# Debug information
-	DebugDraw2D.set_text("X", global_position.x)
-	DebugDraw2D.set_text("Y", global_position.y)
-	DebugDraw2D.set_text("Z", global_position.z)
-	DebugDraw2D.set_text("Elapsed Time", elapsed_time)
-	DebugDraw2D.set_text("Total elapsed time", total_time)
+	#DebugDraw2D.set_text("X", global_position.x)
+	#DebugDraw2D.set_text("Y", global_position.y)
+	#DebugDraw2D.set_text("Z", global_position.z)
+	#DebugDraw2D.set_text("Elapsed Time", elapsed_time)
+	#DebugDraw2D.set_text("Total elapsed time", total_time)
 	
 	
 	# Move the object to the target position from the starting position over 1 second
