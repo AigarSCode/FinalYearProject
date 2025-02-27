@@ -29,7 +29,7 @@ var init_complete = false
 var total_time:float = 0
 
 #var api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api"
-var api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='{}'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='2025-02-13'&STOP_TIME='2025-02-27'&STEP_SIZE='1d'&QUANTITIES='1,9,20,23,24,29'"
+var api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='{}'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='2025-02-19'&STOP_TIME='2025-03-05'&STEP_SIZE='1d'&QUANTITIES='1,9,20,23,24,29'"
 var api_horizons_base = "https://ssd.jpl.nasa.gov/api/horizons.api"
 var api_horizons_test_url = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='301'&OBJ_DATA='YES'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='2024-10-31'&STOP_TIME='2024-11-30'&STEP_SIZE='1d'&QUANTITIES='1,9,20,23,24,29'"
 var api_response
@@ -47,14 +47,7 @@ func _ready() -> void:
 	add_child(httprequestNode)
 	httprequestNode.request_completed.connect(self._http_request_completed)
 	
-	# Asteroids with a high ID over 773916 need to be searched with "DES=" before the ID
-	var asteroidDESID
-	if (asteroidNEoWsID >= 1 and asteroidNEoWsID <= 773916):
-		asteroidDESID = str(asteroidNEoWsID)
-	else:
-		asteroidDESID = "DES=" + str(asteroidNEoWsID)
-	
-	api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='" + asteroidDESID + "'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='2025-02-13'&STOP_TIME='2025-02-27'&STEP_SIZE='1d'&QUANTITIES='1'&VEC_TABLE='1'"
+	create_api_request()
 	
 	print("Asteroid ID: " + str(asteroidNEoWsID) + " has query: " + api_horizons)
 	
@@ -83,25 +76,41 @@ func _physics_process(delta):
 				i += 1
 				elapsed_time = 0.0
 				start_pos = global_position
-				target_pos = calculate_Target_Vector()
+				target_pos = calculate_target_vector()
 				
 			else:
 				i = 0
 				elapsed_time = 0.0
 				start_pos = global_position
-				target_pos = calculate_Target_Vector()
+				target_pos = calculate_target_vector()
 
 
-func calculate_Target_Vector():
+func calculate_target_vector():
 	return Vector3((arrayX[i] / scaleVal), (arrayY[i] / scaleVal), (arrayZ[i] / scaleVal))
 
 func init_elements() -> void:
-	start_pos = calculate_Target_Vector()
+	start_pos = calculate_target_vector()
 	global_position = start_pos
 	i += 1
-	target_pos = calculate_Target_Vector()
+	target_pos = calculate_target_vector()
 	$AsteroidMesh.visible = true
 	init_complete = true
+
+func create_api_request() -> void:
+	var start_time = "&START_TIME="
+	var stop_time = "&STOP_TIME="
+	
+	# Asteroids with a high ID over 773916 need to be searched with "DES=" before the ID
+	var asteroidDESID
+	if (asteroidNEoWsID >= 1 and asteroidNEoWsID <= 773916):
+		asteroidDESID = str(asteroidNEoWsID)
+	else:
+		asteroidDESID = "DES=" + str(asteroidNEoWsID)
+	
+	# IMPLEMENT THE DATE CALCULATION NEXT
+	# CONVERT TO DICT, ADD, get_datetime_string_from_datetime_dict(date_dict) AND SPLIT ON 'T' for DATE STRING
+	
+	api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='" + asteroidDESID + "'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&STEP_SIZE='1d'&QUANTITIES='1'&VEC_TABLE='1'" + start_time + stop_time
 
 func _http_request_completed(result, response_code, headers, body) -> void:
 	var json = JSON.new()

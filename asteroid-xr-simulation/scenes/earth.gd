@@ -7,10 +7,12 @@ var asteroidTextures = [preload("res://materials/Asteroid Textures/4k_ceres_fict
 						preload("res://materials/Asteroid Textures/4k_haumea_fictional.jpg"),
 						preload("res://materials/Asteroid Textures/4k_makemake_fictional.jpg")]
 
-var neows_request = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2025-02-20&end_date=2025-02-20&detailed=false&api_key=DEMO_KEY"
+var neows_base_request = "https://api.nasa.gov/neo/rest/v1/feed?api_key=DEMO_KEY"
+var neows_request = ""
 var api_response
 var asteroidList
-var date = "2025-02-20"
+# Get todays date
+var date = Time.get_date_string_from_system()
 
 func _ready() -> void:
 	# Request a list of asteroids for a set day
@@ -18,6 +20,8 @@ func _ready() -> void:
 	var httprequestNode = HTTPRequest.new()
 	add_child(httprequestNode)
 	httprequestNode.request_completed.connect(self._http_request_completed)
+	
+	create_api_request()
 	
 	var error = httprequestNode.request(neows_request)
 	if error != OK:
@@ -43,6 +47,13 @@ func _http_request_completed(result, response_code, headers, body) -> void:
 	
 	create_asteroids()
 
+
+func create_api_request() -> void:
+	var start_date = "&start_date=" + str(date)
+	var end_date = "&end_date=" + str(date)
+	neows_request = neows_base_request + start_date + end_date
+	print("****** NEOWs Request is: " + str(neows_request))
+
 # Function instantiates x number of asteroids from the NEoWs API response 
 func create_asteroids() -> void:
 	for asteroid in asteroidList:
@@ -53,7 +64,7 @@ func create_asteroids() -> void:
 		asteroidInstance.get_node("AsteroidMesh").visible = false
 		
 		# Set a random asteroid texture
-		setAsteroidTexture(asteroidInstance)
+		set_asteroid_texture(asteroidInstance)
 		
 		# Set 0,0,0 coordinates
 		asteroidInstance.position = Vector3(0,0,0)
@@ -69,7 +80,7 @@ func create_asteroids() -> void:
 
 
 # Set a Random Texture to the asteroid instance
-func setAsteroidTexture(asteroidInstance) -> void:
+func set_asteroid_texture(asteroidInstance) -> void:
 	var randomNum = randi_range(0, 3)
 	var mesh = asteroidInstance.get_node("AsteroidMesh")
 	
