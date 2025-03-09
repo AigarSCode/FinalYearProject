@@ -14,9 +14,9 @@ var asteroidList
 # Get todays date
 var date = Time.get_date_string_from_system()
 
+
 func _ready() -> void:
-	# Request a list of asteroids for a set day
-	# Currently manual
+	# Request a list of asteroids for today
 	var httprequestNode = HTTPRequest.new()
 	add_child(httprequestNode)
 	httprequestNode.request_completed.connect(self._http_request_completed)
@@ -27,9 +27,10 @@ func _ready() -> void:
 	if error != OK:
 		print("Request Failed with error: " + str(error))
 
+
 func _process(delta: float) -> void:
 	pass
-	
+
 
 # API Response handling function
 func _http_request_completed(result, response_code, headers, body) -> void:
@@ -49,10 +50,12 @@ func _http_request_completed(result, response_code, headers, body) -> void:
 
 
 func create_api_request() -> void:
+	# Construct API string
 	var start_date = "&start_date=" + str(date)
 	var end_date = "&end_date=" + str(date)
 	neows_request = neows_base_request + start_date + end_date
 	print("****** NEOWs Request is: " + str(neows_request))
+
 
 # Function instantiates x number of asteroids from the NEoWs API response 
 func create_asteroids() -> void:
@@ -76,11 +79,14 @@ func create_asteroids() -> void:
 		
 		add_child(asteroidInstance)
 		
+		# Wait before sending another request
+		# Fixes issue when sending all requests at once
 		await get_tree().create_timer(0.5).timeout
 
 
 # Set a Random Texture to the asteroid instance
 func set_asteroid_texture(asteroidInstance) -> void:
+	# Pick a random number and set the texture of asteroid
 	var randomNum = randi_range(0, 3)
 	var mesh = asteroidInstance.get_node("AsteroidMesh")
 	
