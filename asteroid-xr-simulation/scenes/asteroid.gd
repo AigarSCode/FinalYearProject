@@ -10,7 +10,8 @@ var arrayY:Array = []
 var arrayZ:Array = []
 
 # Scaling value for the distances, 2500 times smaller for the user experience
-var scaleVal:int = 126000
+#var scaleVal:int = 126000
+var scaleVal:int = 100000
 
 # Positions for start and target
 var start_pos:Vector3
@@ -173,32 +174,30 @@ func extract_xyz_coordinates() -> void:
 	for i in range(2, row.size(), 2):
 		coordinates = row[i].split(" ")
 		
-		var index
-		
 		# The following handles positive and negative XYZ values since positive is X = 1.234 and negative is X =-1.234
-		# Meaning split will split negative into ['X', '=-1.234'] causing an error
-		if (coordinates[2].contains("E+")):
-			index = 2
-		else:
-			index = 3
+		# The previous implementation of split will split negative into ['X', '=-1.234'] causing an error
+		# New Implementation finds the index of each element and take the next value or the one after
 		
-		if (coordinates[index].contains("=")):
-			arrayX.append(float(coordinates[index].split("=")[1]))
-		else:
-			arrayX.append(float(coordinates[index]))
+		# X
+		var xPos = coordinates.find("X")
+		if (coordinates[xPos + 1] == "="):
+			arrayX.append(float(coordinates[xPos + 2]))
+		elif (coordinates[xPos + 1].contains("E+")):
+			arrayX.append(float(coordinates[xPos + 1].split("=")[1]))
 		
-		index += 2
+		# Y 
+		var yPos = coordinates.find("Y")
+		if (coordinates[yPos + 1] == "="):
+			arrayY.append(float(coordinates[yPos + 2]))
+		elif (coordinates[yPos + 1].contains("E+")):
+			arrayY.append(float(coordinates[yPos + 1].split("=")[1]))
 		
-		if (coordinates[index].contains("=")):
-			arrayY.append(float(coordinates[index].split("=")[1]))
-		else:
-			arrayY.append(float(coordinates[index]))
-		
-		index += 2
-		
-		if (coordinates[index].contains("=")):
-			arrayZ.append(float(coordinates[index].split("=")[1]))
-		else:
-			arrayZ.append(float(coordinates[index]))
+		# Z
+		var zPos = coordinates.find("Z")
+		if (coordinates[zPos + 1] == "="):
+			arrayZ.append(float(coordinates[zPos + 2]))
+		elif (coordinates[zPos + 1].contains("E+")):
+			arrayZ.append(float(coordinates[zPos + 1].split("=")[1]))
+	
 	
 	init_elements()
