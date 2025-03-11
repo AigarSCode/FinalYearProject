@@ -1,6 +1,7 @@
 extends Node3D
 
 var asteroidScene:Resource = preload("res://scenes/asteroidScene.tscn")
+var asteroidInstances:Array
 # Asteroid Images from Solar System Scope (https://www.solarsystemscope.com/textures/)
 var asteroidTextures = [preload("res://materials/Asteroid Textures/4k_ceres_fictional.jpg"),
 						preload("res://materials/Asteroid Textures/4k_eris_fictional.jpg"),
@@ -74,15 +75,25 @@ func create_asteroids() -> void:
 		
 		# Assign ID and NEO reference ID 
 		asteroidInstance.asteroidID = asteroid.id
-		asteroidInstance.asteroidNEoWsID = asteroid.neo_reference_id
+		asteroidInstance.asteroidNeoWsID = asteroid.neo_reference_id
 		asteroidInstance.asteroidName = asteroid.name
+		
+		asteroidInstances.append(asteroidInstance)
 		
 		add_child(asteroidInstance)
 		
 		# Wait before sending another request
 		# Fixes issue when sending all requests at once
 		await get_tree().create_timer(0.5).timeout
+	
+	# Start asteroid movement
+	activate_asteroids()
 
+
+# Start asteroid movement all at the same time
+func activate_asteroids():
+	for asteroid in asteroidInstances:
+		asteroid.start_movement = true
 
 # Set a Random Texture to the asteroid instance
 func set_asteroid_texture(asteroidInstance) -> void:

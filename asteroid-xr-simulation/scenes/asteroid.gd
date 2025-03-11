@@ -2,7 +2,7 @@ extends Node3D
 
 var asteroidID:int
 var asteroidName:String
-var asteroidNEoWsID:int
+var asteroidNeoWsID:int
 
 # Asteroid Positional Information
 var arrayX:Array = []
@@ -25,14 +25,12 @@ var elapsed_time:float = 0.0
 var i:int = 0
 
 var init_complete = false
+var start_movement = false
 
 # Total time elapsed
 var total_time:float = 0
 
-#var api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api"
-var api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='{}'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='2025-02-19'&STOP_TIME='2025-03-05'&STEP_SIZE='1d'&QUANTITIES='1,9,20,23,24,29'"
-var api_horizons_base = "https://ssd.jpl.nasa.gov/api/horizons.api"
-var api_horizons_test_url = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='301'&OBJ_DATA='YES'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='2024-10-31'&STOP_TIME='2024-11-30'&STEP_SIZE='1d'&QUANTITIES='1,9,20,23,24,29'"
+var api_horizons
 var api_response
 var vector_table
 
@@ -52,7 +50,7 @@ func _ready() -> void:
 	
 	create_api_request()
 	
-	print("Asteroid ID: " + str(asteroidNEoWsID) + " has query: " + api_horizons)
+	print("Asteroid ID: " + str(asteroidNeoWsID) + " has query: " + api_horizons)
 	
 	var error = httprequestNode.request(api_horizons)
 	if error != OK:
@@ -60,13 +58,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta):
-	DebugDraw2D.set_text("X", global_position.x)
-	DebugDraw2D.set_text("Y", global_position.y)
-	DebugDraw2D.set_text("Z", global_position.z)
-	DebugDraw2D.set_text("Elapsed Time", elapsed_time)
-	DebugDraw2D.set_text("Total elapsed time", total_time)
 	
-	if init_complete:
+	if init_complete and start_movement:
 		# Move the object to the target position from the starting position over 1 second
 		# Once moved to target, increase array index, set start position to current position, recalculate target and continue moving
 		if elapsed_time < simTimeFrame:
@@ -109,10 +102,10 @@ func create_api_request() -> void:
 	
 	# Asteroids with a high ID over 773916 need to be searched with "DES=" before the ID
 	var asteroidDESID
-	if (asteroidNEoWsID >= 1 and asteroidNEoWsID <= 773916):
-		asteroidDESID = str(asteroidNEoWsID)
+	if (asteroidNeoWsID >= 1 and asteroidNeoWsID <= 773916):
+		asteroidDESID = str(asteroidNeoWsID)
 	else:
-		asteroidDESID = "DES=" + str(asteroidNEoWsID)
+		asteroidDESID = "DES=" + str(asteroidNeoWsID)
 	
 	set_date_range()
 	
@@ -136,17 +129,15 @@ func set_date_range() -> void:
 	start_time = start_time + Time.get_datetime_string_from_datetime_dict(date_back, true).split(" ")[0]
 	stop_time = stop_time + Time.get_datetime_string_from_datetime_dict(date_forw, true).split(" ")[0]
 	
-	print("Start time is: ", start_time)
-	print("Stop time is: ", stop_time)
+	#print("Start time is: ", start_time)
+	#print("Stop time is: ", stop_time)
 
 
 func _http_request_completed(result, response_code, headers, body) -> void:
 	var json = JSON.new()
 	json.parse(body.get_string_from_utf8())
-	print("JSON for ID: " + str(asteroidNEoWsID) + " is: " + str(json.data))
+	#print("JSON for ID: " + str(asteroidNeoWsID) + " is: " + str(json.data))
 	# Extract the Result of the Query (Contains the Vector Table)
-	#var data = json.get_data()
-	#print("Data for ID: " + str(asteroidNEoWsID) + " is: " + json.left(100))
 	api_response = json.get_data().result
 	
 	extract_vector_table_elements()
@@ -154,14 +145,14 @@ func _http_request_completed(result, response_code, headers, body) -> void:
 
 # Taking the Result of the Query and extracting the Vector Table only
 func extract_vector_table_elements() -> void:
-	# Remove the text before the vector table
+	# Remove the text before the vector table (Start Of Ephemeris)
 	vector_table = api_response.split("$$SOE")
-	# Remove the text after the vector table
+	# Remove the text after the vector table (End Of Ephemeris)
 	vector_table = vector_table[1].split("$$EOE")
 	# Keep only the vector table
 	vector_table = vector_table[0]
 	
-	print("Vector Table is:", vector_table)
+	#print("Vector Table is:", vector_table)
 	
 	extract_xyz_coordinates()
 
@@ -172,6 +163,9 @@ func extract_xyz_coordinates() -> void:
 	var coordinates
 	
 	for i in range(2, row.size(), 2):
+		var xPos
+		var yPos
+		var zPos
 		coordinates = row[i].split(" ")
 		
 		# The following handles positive and negative XYZ values since positive is X = 1.234 and negative is X =-1.234
@@ -179,25 +173,29 @@ func extract_xyz_coordinates() -> void:
 		# New Implementation finds the index of each element and take the next value or the one after
 		
 		# X
-		var xPos = coordinates.find("X")
+		xPos = coordinates.find("X")
 		if (coordinates[xPos + 1] == "="):
 			arrayX.append(float(coordinates[xPos + 2]))
 		elif (coordinates[xPos + 1].contains("E+")):
 			arrayX.append(float(coordinates[xPos + 1].split("=")[1]))
 		
 		# Y 
-		var yPos = coordinates.find("Y")
+		yPos = coordinates.find("Y")
 		if (coordinates[yPos + 1] == "="):
 			arrayY.append(float(coordinates[yPos + 2]))
 		elif (coordinates[yPos + 1].contains("E+")):
 			arrayY.append(float(coordinates[yPos + 1].split("=")[1]))
 		
 		# Z
-		var zPos = coordinates.find("Z")
+		zPos = coordinates.find("Z")
 		if (coordinates[zPos + 1] == "="):
 			arrayZ.append(float(coordinates[zPos + 2]))
 		elif (coordinates[zPos + 1].contains("E+")):
 			arrayZ.append(float(coordinates[zPos + 1].split("=")[1]))
 	
-	
 	init_elements()
+
+
+# Extract all asteroid information for display use
+func extract_information():
+	pass
