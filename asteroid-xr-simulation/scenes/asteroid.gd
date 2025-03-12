@@ -3,6 +3,13 @@ extends Node3D
 var asteroidID:int
 var asteroidName:String
 var asteroidNeoWsID:int
+var estimated_diameter_min:float
+var estimated_diameter_max:float
+var is_potentially_hazardous:bool
+# Sentry object boolean (https://cneos.jpl.nasa.gov/sentry/)
+var is_sentry_object:bool
+var element_data_dictionary:Dictionary = {}
+
 
 # Asteroid Positional Information
 var arrayX:Array = []
@@ -24,12 +31,15 @@ var elapsed_time:float = 0.0
 # All array index
 var i:int = 0
 
-var init_complete = false
-var start_movement = false
+var init_complete:bool = false
+var start_movement:bool = false
+var is_paused:bool = false
 
 # Total time elapsed
 var total_time:float = 0
 
+var httprequestNode:HTTPRequest
+var sbdb_base_request = "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr="
 var api_horizons
 var api_response
 var vector_table
@@ -38,13 +48,12 @@ var date = Time.get_date_string_from_system()
 var start_time
 var stop_time
 
-var print:bool = true
 
 func _ready() -> void:
 	print("Asteroid Created with ID: " + str(asteroidID) + " and name: " + asteroidName)
 	
 	# Nasa Horizons API request for asteroid position
-	var httprequestNode = HTTPRequest.new()
+	httprequestNode = HTTPRequest.new()
 	add_child(httprequestNode)
 	httprequestNode.request_completed.connect(self._http_request_completed)
 	
@@ -52,9 +61,7 @@ func _ready() -> void:
 	
 	print("Asteroid ID: " + str(asteroidNeoWsID) + " has query: " + api_horizons)
 	
-	var error = httprequestNode.request(api_horizons)
-	if error != OK:
-		print("Request Failed with error: " + str(error))
+	make_api_request(api_horizons)
 
 
 func _physics_process(delta):
@@ -113,6 +120,12 @@ func create_api_request() -> void:
 	api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='" + asteroidDESID + "'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&STEP_SIZE='1d'&QUANTITIES='1'&VEC_TABLE='1'" + start_time + stop_time
 
 
+func make_api_request(request_url):
+	var error = httprequestNode.request(request_url)
+	if error != OK:
+		print("Request Failed with error: " + str(error))
+
+
 # Setting the date range for the API call, for now this is 7 days back and 7 days forward
 func set_date_range() -> void:
 	var date_back = Time.get_datetime_dict_from_system()
@@ -128,11 +141,9 @@ func set_date_range() -> void:
 	# Get only the date part (YYYY-MM-DD) of the datetime_string (YYYY-MM-DD HH:MM:SS)
 	start_time = start_time + Time.get_datetime_string_from_datetime_dict(date_back, true).split(" ")[0]
 	stop_time = stop_time + Time.get_datetime_string_from_datetime_dict(date_forw, true).split(" ")[0]
-	
-	#print("Start time is: ", start_time)
-	#print("Stop time is: ", stop_time)
 
 
+# Function that is called when an API request is completed, used to extract response body
 func _http_request_completed(result, response_code, headers, body) -> void:
 	var json = JSON.new()
 	json.parse(body.get_string_from_utf8())
@@ -196,6 +207,25 @@ func extract_xyz_coordinates() -> void:
 	init_elements()
 
 
-# Extract all asteroid information for display use
-func extract_information():
-	pass
+# Creates Orbital Data API request only when asteroid gets selected
+func get_asteroid_orbital_data():
+	var request_orbital_data_url = sbdb_base_request + str(asteroidNeoWsID)
+	
+	make_api_request(request_orbital_data_url)
+
+
+# Extract all asteroid orbial information for display use
+func extract_asteroid_orbital_data(orbital_data):
+	var elements = orbital_data["orbit"]["elements"]
+	
+	# For each element, construct a visual string e.g "perihelion distance = 1.03 au (q)"
+	for element in elements:
+		var element_string
+		
+		if element.units == null:
+			element_string = element.title + " = " + str(element.value) + " (" + element.label + ")"
+		else:
+			element_string = element.title + " = " + str(element.value) + " " + element.units + " (" + element.label + ")"
+		
+		# Store string in dictionary for use
+		element_data_dictionary[element.name] = element_string

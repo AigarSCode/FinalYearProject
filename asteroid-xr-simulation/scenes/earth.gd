@@ -2,6 +2,7 @@ extends Node3D
 
 var asteroidScene:Resource = preload("res://scenes/asteroidScene.tscn")
 var asteroidInstances:Array
+
 # Asteroid Images from Solar System Scope (https://www.solarsystemscope.com/textures/)
 var asteroidTextures = [preload("res://materials/Asteroid Textures/4k_ceres_fictional.jpg"),
 						preload("res://materials/Asteroid Textures/4k_eris_fictional.jpg"),
@@ -12,25 +13,34 @@ var neows_base_request = "https://api.nasa.gov/neo/rest/v1/feed?api_key=DEMO_KEY
 var neows_request = ""
 var api_response
 var asteroidList
+
 # Get todays date
 var date = Time.get_date_string_from_system()
 
+# HTTPRequest Node for API calls
+var httprequestNode:HTTPRequest
+
 
 func _ready() -> void:
-	# Request a list of asteroids for today
-	var httprequestNode = HTTPRequest.new()
+	# Create a HTTPRequest Node and connect
+	httprequestNode = HTTPRequest.new()
 	add_child(httprequestNode)
 	httprequestNode.request_completed.connect(self._http_request_completed)
 	
 	create_api_request()
 	
-	var error = httprequestNode.request(neows_request)
-	if error != OK:
-		print("Request Failed with error: " + str(error))
+	make_api_request()
 
 
 func _process(delta: float) -> void:
 	pass
+
+
+# Make HTTP Request
+func make_api_request():
+	var error = httprequestNode.request(neows_request)
+	if error != OK:
+		print("Request Failed with error: " + str(error))
 
 
 # API Response handling function
@@ -78,6 +88,12 @@ func create_asteroids() -> void:
 		asteroidInstance.asteroidNeoWsID = asteroid.neo_reference_id
 		asteroidInstance.asteroidName = asteroid.name
 		
+		# Assign extra information
+		asteroidInstance.estimated_diameter_min = asteroid["estimated_diameter"]["kilometers"]["estimated_diameter_min"]
+		asteroidInstance.estimated_diameter_max = asteroid["estimated_diameter"]["kilometers"]["estimated_diameter_max"]
+		asteroidInstance.is_potentially_hazardous = asteroid.is_potentially_hazardous_asteroid
+		asteroidInstance.is_sentry_object = asteroid.is_sentry_object
+		
 		asteroidInstances.append(asteroidInstance)
 		
 		add_child(asteroidInstance)
@@ -94,6 +110,7 @@ func create_asteroids() -> void:
 func activate_asteroids():
 	for asteroid in asteroidInstances:
 		asteroid.start_movement = true
+
 
 # Set a Random Texture to the asteroid instance
 func set_asteroid_texture(asteroidInstance) -> void:
