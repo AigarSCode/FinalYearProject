@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://dq7hc5yhg1vou"]
+[gd_scene load_steps=11 format=3 uid="uid://dq7hc5yhg1vou"]
 
+[ext_resource type="Script" uid="uid://qbklfeuu074o" path="res://scenes/main_scene.gd" id="1_1jq6i"]
 [ext_resource type="Script" uid="uid://b64kcovck67ba" path="res://scenes/earth.gd" id="1_w16ng"]
 [ext_resource type="Script" uid="uid://c1igp6w7ysk7u" path="res://scenes/camera_movement.gd" id="2_0yhlv"]
 [ext_resource type="Texture2D" uid="uid://c0j17pybsxdhw" path="res://materials/8k_earth_daymap.jpg" id="2_w16ng"]
@@ -24,6 +25,7 @@ background_mode = 1
 background_color = Color(0.646029, 0.646029, 0.646029, 1)
 
 [node name="Node3D" type="Node3D"]
+script = ExtResource("1_1jq6i")
 
 [node name="Earth" type="Node3D" parent="."]
 script = ExtResource("1_w16ng")
@@ -49,3 +51,15 @@ mesh = SubResource("SphereMesh_faicv")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ldj8n")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75, 0, 75)
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 0)
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
+tracker = &"left_hand"
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
+tracker = &"right_hand"
