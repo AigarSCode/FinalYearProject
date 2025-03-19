@@ -1,24 +1,17 @@
-[gd_scene load_steps=11 format=3 uid="uid://dq7hc5yhg1vou"]
+[gd_scene load_steps=8 format=3 uid="uid://dq7hc5yhg1vou"]
 
 [ext_resource type="Script" uid="uid://qbklfeuu074o" path="res://scenes/main_scene.gd" id="1_1jq6i"]
 [ext_resource type="Script" uid="uid://b64kcovck67ba" path="res://scenes/earth.gd" id="1_w16ng"]
 [ext_resource type="Script" uid="uid://c1igp6w7ysk7u" path="res://scenes/camera_movement.gd" id="2_0yhlv"]
 [ext_resource type="Texture2D" uid="uid://c0j17pybsxdhw" path="res://materials/8k_earth_daymap.jpg" id="2_w16ng"]
-[ext_resource type="Script" uid="uid://biueimr5aqr0x" path="res://scenes/moon.gd" id="3_2xgwo"]
-[ext_resource type="Material" uid="uid://efphtpl7eubk" path="res://materials/moonMaterial.tres" id="3_75sbf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1jq6i"]
 albedo_texture = ExtResource("2_w16ng")
 
 [sub_resource type="SphereMesh" id="SphereMesh_1pxj5"]
 material = SubResource("StandardMaterial3D_1jq6i")
-radius = 20.0
-height = 40.0
-
-[sub_resource type="SphereMesh" id="SphereMesh_faicv"]
-material = ExtResource("3_75sbf")
-radius = 10.0
-height = 20.0
+radius = 2.0
+height = 4.0
 
 [sub_resource type="Environment" id="Environment_ldj8n"]
 background_color = Color(0.646029, 0.646029, 0.646029, 1)
@@ -42,21 +35,14 @@ speed = 50.0
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.869788, 2.15683e-08, -0.493426, 0.493426, -3.80196e-08, 0.869788, 1.03154e-16, -1, -4.37114e-08, -83.1232, 100, 0)
 
-[node name="Moon" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.7193, 0, 0)
-script = ExtResource("3_2xgwo")
-
-[node name="MoonMesh" type="MeshInstance3D" parent="Moon"]
-mesh = SubResource("SphereMesh_faicv")
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ldj8n")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75, 0, 75)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.5, -10, 0)
+world_scale = 15.0
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 0)
 
 [node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
 tracker = &"left_hand"

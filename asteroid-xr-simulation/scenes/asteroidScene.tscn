@@ -5,8 +5,6 @@
 
 [sub_resource type="SphereMesh" id="SphereMesh_gpmln"]
 material = ExtResource("2_4hbyb")
-radius = 10.0
-height = 20.0
 
 [node name="Asteroid" type="Node3D"]
 script = ExtResource("1_8v4dh")

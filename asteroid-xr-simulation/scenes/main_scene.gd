@@ -2,7 +2,10 @@ extends Node3D
 
 var xr_interface: XRInterface
 
+var current_date = Time.get_datetime_string_from_system()
+
 func _ready() -> void:
+	# Enable XR Passthrough
 	init_XR()
 
 

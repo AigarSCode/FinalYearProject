@@ -16,9 +16,8 @@ var arrayX:Array = []
 var arrayY:Array = []
 var arrayZ:Array = []
 
-# Scaling value for the distances, 2500 times smaller for the user experience
-#var scaleVal:int = 126000
-var scaleVal:int = 100000
+# Scaling value for the distances adjusted for user experience
+var scaleVal:int
 
 # Positions for start and target
 var start_pos:Vector3
@@ -172,6 +171,22 @@ func extract_vector_table_elements() -> void:
 func extract_xyz_coordinates() -> void:
 	var row = vector_table.split("\n")
 	var coordinates
+	
+	# Set ScaleVal for different distances
+	var individual_coordinates = row[2].split("Y")
+	if individual_coordinates[0].contains("E+04"):
+		scaleVal = 5000
+	elif individual_coordinates[0].contains("E+05"):
+		scaleVal = 50000
+	elif individual_coordinates[0].contains("E+06"):
+		scaleVal = 150000
+	elif individual_coordinates[0].contains("E+07"):
+		scaleVal = 1500000
+	elif individual_coordinates[0].contains("E+08"):
+		scaleVal = 15000000
+	elif individual_coordinates[0].contains("E+09"):
+		scaleVal = 150000000
+	
 	
 	for i in range(2, row.size(), 2):
 		var xPos
