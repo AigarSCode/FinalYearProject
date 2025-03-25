@@ -40,7 +40,6 @@ environment = SubResource("Environment_ldj8n")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.5, -10, 0)
-world_scale = 15.0
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 

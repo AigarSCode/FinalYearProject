@@ -1,0 +1,102 @@
+[gd_scene load_steps=4 format=3 uid="uid://bkqfiualmlun6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c70f3"]
+size = Vector3(0.5, 0.5, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c70f3"]
+transparency = 1
+albedo_color = Color(0.0117647, 0.0941176, 0.141176, 0.305882)
+
+[sub_resource type="QuadMesh" id="QuadMesh_tjcum"]
+size = Vector2(0.5, 0.5)
+
+[node name="InfoBox" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_c70f3")
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.001)
+material_override = SubResource("StandardMaterial3D_c70f3")
+mesh = SubResource("QuadMesh_tjcum")
+skeleton = NodePath("")
+
+[node name="LabelAsteroidName" type="Label3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.22, 0.001)
+text = "ASTEROID NAME: 4034 Vishnu (1986 PA)"
+
+[node name="LabelAsteroidID" type="Label3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.195, 0.001)
+text = "ASTEROID NEO ID: 54055061"
+
+[node name="LabelInfoSection" type="Label3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.17, 0.001)
+text = "Asteroid Statistics"
+
+[node name="ElementLabels" type="Node3D" parent="."]
+
+[node name="LabelElement1" type="Label3D" parent="ElementLabels"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.25, 0.0302572, 0.001)
+text = "longitude of the ascending node = 1.03 deg (node)"
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelElement2" type="Label3D" parent="ElementLabels"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.25, 0.00569324, 0.001)
+text = "longitude of the ascending node = 1.03 deg (node)"
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelElement3" type="Label3D" parent="ElementLabels"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.25, -0.0197429, 0.001)
+text = "longitude of the ascending node = 1.03 deg (node)"
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelElement4" type="Label3D" parent="ElementLabels"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.25, -0.0447429, 0.001)
+text = "longitude of the ascending node = 1.03 deg (node)"
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelElement5" type="Label3D" parent="ElementLabels"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.25, -0.0697428, 0.001)
+text = "longitude of the ascending node = 1.03 deg (node)"
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelElement6" type="Label3D" parent="ElementLabels"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.25, -0.0947428, 0.001)
+text = "longitude of the ascending node = 1.03 deg (node)"
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelElement7" type="Label3D" parent="ElementLabels"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.25, -0.119743, 0.001)
+text = "longitude of the ascending node = 1.03 deg (node)"
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelElement8" type="Label3D" parent="ElementLabels"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.25, -0.144743, 0.001)
+text = "longitude of the ascending node = 1.03 deg (node)"
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelElement9" type="Label3D" parent="ElementLabels"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.25, -0.169743, 0.001)
+text = "longitude of the ascending node = 1.03 deg (node)"
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelElement10" type="Label3D" parent="ElementLabels"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.25, -0.194743, 0.001)
+text = "longitude of the ascending node = 1.03 deg (node)"
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelElement11" type="Label3D" parent="ElementLabels"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.25, -0.219743, 0.001)
+text = "longitude of the ascending node = 1.03 deg (node)"
+horizontal_alignment = 0
+vertical_alignment = 0
