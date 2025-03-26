@@ -89,10 +89,22 @@ func create_asteroids() -> void:
 		asteroidInstance.asteroidName = asteroid.name
 		
 		# Assign extra information
-		asteroidInstance.estimated_diameter_min = asteroid["estimated_diameter"]["kilometers"]["estimated_diameter_min"]
-		asteroidInstance.estimated_diameter_max = asteroid["estimated_diameter"]["kilometers"]["estimated_diameter_max"]
+		asteroidInstance.estimated_diameterKm_min = asteroid["estimated_diameter"]["kilometers"]["estimated_diameter_min"]
+		asteroidInstance.estimated_diameterKm_max = asteroid["estimated_diameter"]["kilometers"]["estimated_diameter_max"]
+		asteroidInstance.estimated_diameterMi_min = asteroid["estimated_diameter"]["miles"]["estimated_diameter_min"]
+		asteroidInstance.estimated_diameterMi_max = asteroid["estimated_diameter"]["miles"]["estimated_diameter_max"]
 		asteroidInstance.is_potentially_hazardous = asteroid.is_potentially_hazardous_asteroid
 		asteroidInstance.is_sentry_object = asteroid.is_sentry_object
+		
+		# Close approach information
+		var close_approach_data = asteroid["close_approach_data"][0]
+		asteroidInstance.orbitingBody = close_approach_data["orbiting_body"]
+		asteroidInstance.dateFull = close_approach_data["close_approach_date_full"]
+		asteroidInstance.relativeVelKm = close_approach_data["relative_velocity"]["kilometers_per_hour"]
+		asteroidInstance.relativeVelMi = close_approach_data["relative_velocity"]["miles_per_hour"]
+		asteroidInstance.missDistKm = close_approach_data["miss_distance"]["kilometers"]
+		asteroidInstance.missDistMi = close_approach_data["miss_distance"]["miles"]
+		asteroidInstance.missDistAU = close_approach_data["miss_distance"]["astronomical"]
 		
 		asteroidInstances.append(asteroidInstance)
 		

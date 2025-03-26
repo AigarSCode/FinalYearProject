@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://bkqfiualmlun6"]
+[gd_scene load_steps=11 format=3 uid="uid://bkqfiualmlun6"]
 
+[ext_resource type="Script" uid="uid://do6mopilcca10" path="res://scenes/info_box.gd" id="1_d5sr5"]
 [ext_resource type="Material" uid="uid://5qm2xd5k1m43" path="res://materials/ButtonSelected.tres" id="1_piijq"]
 [ext_resource type="Material" uid="uid://ds2ed7gfh2x0t" path="res://materials/ButtonUnselected.tres" id="2_d5sr5"]
 
@@ -29,6 +30,7 @@ material = ExtResource("2_d5sr5")
 size = Vector3(1, 0.4, 0.1)
 
 [node name="InfoBox" type="StaticBody3D"]
+script = ExtResource("1_d5sr5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_c70f3")
@@ -41,11 +43,11 @@ skeleton = NodePath("")
 
 [node name="LabelAsteroidName" type="Label3D" parent="."]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.22, 0.001)
-text = "Asteriod Name: 4034 Vishnu (1986 PA)"
+text = "Asteriod Name: "
 
 [node name="LabelAsteroidID" type="Label3D" parent="."]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.195, 0.001)
-text = "Asteroid NEO ID: 54055061"
+text = "Asteroid NEO ID: "
 
 [node name="AsteroidInformationTab" type="Node3D" parent="."]
 
@@ -55,37 +57,49 @@ text = "Asteroid Information"
 
 [node name="LabelHazardous" type="Label3D" parent="AsteroidInformationTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.125358, 0.001)
-text = "Potentially Hazardous? : YES "
+text = "Potentially Hazardous? : "
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelSentry" type="Label3D" parent="AsteroidInformationTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.100358, 0.001)
-text = "Sentry Object? : YES"
+text = "Sentry Object? : "
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelDiameterKm" type="Label3D" parent="AsteroidInformationTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.0753576, 0.001)
-text = "Estimated Diameter (km): 0.0429887658 to 0.0961258026"
+text = "Estimated Diameter (km): "
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelDiameterMi" type="Label3D" parent="AsteroidInformationTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.0503576, 0.001)
-text = "Estimated Diameter (mi): 0.0100439827 to 0.0224590281"
+text = "Estimated Diameter (mi): "
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelEarliestObs" type="Label3D" parent="AsteroidInformationTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.0253576, 0.001)
-text = "Earliest Recorded Observation: 2025-03-25"
+text = "Earliest Recorded Observation: "
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelLatestObs" type="Label3D" parent="AsteroidInformationTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.000357572, 0.001)
-text = "Latest Recorded Observation: 2025-03-25"
+text = "Latest Recorded Observation: "
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelSource" type="Label3D" parent="AsteroidInformationTab"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, -0.025, 0.001)
+text = "Source: "
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="LabelProducer" type="Label3D" parent="AsteroidInformationTab"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, -0.05, 0.001)
+text = "Producer: "
 horizontal_alignment = 0
 vertical_alignment = 0
 
@@ -98,43 +112,43 @@ text = "Closest Approach Data"
 
 [node name="LabelOrbitingBody" type="Label3D" parent="CloseApproachDataTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.125358, 0.001)
-text = "Orbiting Body: Earth"
+text = "Orbiting Body: "
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelDateFull" type="Label3D" parent="CloseApproachDataTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.100358, 0.001)
-text = "Date Full: 2025-Mar-27 14:17"
+text = "Date Full: "
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelRelativeVelKm" type="Label3D" parent="CloseApproachDataTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.0753576, 0.001)
-text = "Relative Velocity (kmph): 17924.7324347911"
+text = "Relative Velocity (kmph): "
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelRelativeVelMi" type="Label3D" parent="CloseApproachDataTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.0503576, 0.001)
-text = "Relative Velocity (mph): 11137.7316620512"
+text = "Relative Velocity (mph): "
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelMissDistKm" type="Label3D" parent="CloseApproachDataTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.0253576, 0.001)
-text = "Miss Distance (km): 24824602.325956086"
+text = "Miss Distance (km): "
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelMissDistMi" type="Label3D" parent="CloseApproachDataTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.000357572, 0.001)
-text = "Miss Distance (mi): 15425292.6050265468"
+text = "Miss Distance (mi): "
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelMissDistAu" type="Label3D" parent="CloseApproachDataTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, -0.025, 0.001)
-text = "Miss Distance (au): 0.1659422178"
+text = "Miss Distance (au): "
 horizontal_alignment = 0
 vertical_alignment = 0
 
@@ -147,67 +161,56 @@ text = "Orbital Elements"
 
 [node name="LabelElement1" type="Label3D" parent="OrbitalElementTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.125358, 0.001)
-text = "longitude of the ascending node = 1.03 deg (node)"
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelElement2" type="Label3D" parent="OrbitalElementTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.100358, 0.001)
-text = "longitude of the ascending node = 1.03 deg (node)"
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelElement3" type="Label3D" parent="OrbitalElementTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.0753576, 0.001)
-text = "longitude of the ascending node = 1.03 deg (node)"
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelElement4" type="Label3D" parent="OrbitalElementTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.0503576, 0.001)
-text = "longitude of the ascending node = 1.03 deg (node)"
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelElement5" type="Label3D" parent="OrbitalElementTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.0253576, 0.001)
-text = "longitude of the ascending node = 1.03 deg (node)"
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelElement6" type="Label3D" parent="OrbitalElementTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, 0.000357572, 0.001)
-text = "longitude of the ascending node = 1.03 deg (node)"
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelElement7" type="Label3D" parent="OrbitalElementTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, -0.025, 0.001)
-text = "longitude of the ascending node = 1.03 deg (node)"
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelElement8" type="Label3D" parent="OrbitalElementTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, -0.05, 0.001)
-text = "longitude of the ascending node = 1.03 deg (node)"
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelElement9" type="Label3D" parent="OrbitalElementTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, -0.075, 0.001)
-text = "longitude of the ascending node = 1.03 deg (node)"
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelElement10" type="Label3D" parent="OrbitalElementTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, -0.1, 0.001)
-text = "longitude of the ascending node = 1.03 deg (node)"
 horizontal_alignment = 0
 vertical_alignment = 0
 
 [node name="LabelElement11" type="Label3D" parent="OrbitalElementTab"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.225, -0.125, 0.001)
-text = "longitude of the ascending node = 1.03 deg (node)"
 horizontal_alignment = 0
 vertical_alignment = 0
 

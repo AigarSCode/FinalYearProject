@@ -1,13 +1,27 @@
 extends Node3D
 
+# Asteroid Information
 var asteroidID:int
 var asteroidName:String
 var asteroidNeoWsID:int
-var estimated_diameter_min:float
-var estimated_diameter_max:float
+var orbitingBody:String
+var dateFull:String
+var relativeVelKm:float
+var relativeVelMi:float
+var missDistKm:float
+var missDistMi:float
+var missDistAU:float
+var estimated_diameterKm_min:float
+var estimated_diameterKm_max:float
+var estimated_diameterMi_min:float
+var estimated_diameterMi_max:float
 var is_potentially_hazardous:bool
 # Sentry object boolean (https://cneos.jpl.nasa.gov/sentry/)
 var is_sentry_object:bool
+var source:String
+var producer:String
+var earliestObs:String
+var latestObs:String
 var element_data_dictionary:Dictionary = {}
 
 
@@ -232,6 +246,7 @@ func get_asteroid_orbital_data():
 # Extract all asteroid orbial information for display use
 func extract_asteroid_orbital_data(orbital_data):
 	var elements = orbital_data["orbit"]["elements"]
+	var otherOrbit = orbital_data["orbit"]
 	
 	# For each element, construct a visual string e.g "perihelion distance = 1.03 au (q)"
 	for element in elements:
@@ -244,3 +259,10 @@ func extract_asteroid_orbital_data(orbital_data):
 		
 		# Store string in dictionary for use
 		element_data_dictionary[element.name] = element_string
+	
+	# Set other orbit data
+	source = otherOrbit.source
+	producer = otherOrbit.producer
+	earliestObs = otherOrbit.first_obs
+	latestObs = otherOrbit.last_obs
+	
