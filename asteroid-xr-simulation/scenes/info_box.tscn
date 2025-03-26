@@ -1,4 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bkqfiualmlun6"]
+[gd_scene load_steps=10 format=3 uid="uid://bkqfiualmlun6"]
+
+[ext_resource type="Material" uid="uid://5qm2xd5k1m43" path="res://materials/ButtonSelected.tres" id="1_piijq"]
+[ext_resource type="Material" uid="uid://ds2ed7gfh2x0t" path="res://materials/ButtonUnselected.tres" id="2_d5sr5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c70f3"]
 size = Vector3(0.5, 0.5, 0)
@@ -13,7 +16,16 @@ size = Vector2(0.5, 0.5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_tjcum"]
 size = Vector3(1, 0.4, 0.1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_piijq"]
+[sub_resource type="BoxMesh" id="BoxMesh_ww10x"]
+material = ExtResource("1_piijq")
+size = Vector3(1, 0.4, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tipme"]
+material = ExtResource("2_d5sr5")
+size = Vector3(1, 0.4, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fhbsv"]
+material = ExtResource("2_d5sr5")
 size = Vector3(1, 0.4, 0.1)
 
 [node name="InfoBox" type="StaticBody3D"]
@@ -206,7 +218,12 @@ transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.16, -0.2, 0)
 shape = SubResource("BoxShape3D_tjcum")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="TabButton1"]
-mesh = SubResource("BoxMesh_piijq")
+mesh = SubResource("BoxMesh_ww10x")
+
+[node name="LabelTab1" type="Label3D" parent="TabButton1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.051)
+text = "Information"
+font_size = 30
 
 [node name="TabButton2" type="StaticBody3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, -0.2, 0)
@@ -215,7 +232,13 @@ transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, -0.2, 0)
 shape = SubResource("BoxShape3D_tjcum")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="TabButton2"]
-mesh = SubResource("BoxMesh_piijq")
+mesh = SubResource("BoxMesh_tipme")
+
+[node name="LabelTab2" type="Label3D" parent="TabButton2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0.051)
+text = "Close
+Approach"
+font_size = 30
 
 [node name="TabButton3" type="StaticBody3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.16, -0.2, 0)
@@ -224,4 +247,10 @@ transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.16, -0.2, 0)
 shape = SubResource("BoxShape3D_tjcum")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="TabButton3"]
-mesh = SubResource("BoxMesh_piijq")
+mesh = SubResource("BoxMesh_fhbsv")
+
+[node name="LabelTab3" type="Label3D" parent="TabButton3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00188124, 0.051)
+text = "Orbit
+Elements"
+font_size = 30
