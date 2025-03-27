@@ -13,7 +13,7 @@ func _ready() -> void:
 	
 	# Set Asteroid Name and ID
 	$LabelAsteroidName.text += asteroid.asteroidName
-	$LabelAsteroidID.text += asteroid.asteroidNeoWsID
+	$LabelAsteroidID.text += str(asteroid.asteroidNeoWsID)
 	
 	populateInfoTab()
 	populateApproachTab()
@@ -40,11 +40,11 @@ func populateInfoTab() -> void:
 func populateApproachTab() -> void:
 	tabList[1].get_node("LabelOrbitingBody").text += asteroid.orbitingBody
 	tabList[1].get_node("LabelDateFull").text += asteroid.dateFull
-	tabList[1].get_node("LabelRelativeVelKm").text += asteroid.relativeVelKm
-	tabList[1].get_node("LabelRelativeVelMi").text += asteroid.relativeVelMi
-	tabList[1].get_node("LabelMissDistKm").text += asteroid.missDistKm
-	tabList[1].get_node("LabelMissDistMi").text += asteroid.missDistMi
-	tabList[1].get_node("LabelMissDistAu").text += asteroid.missDistAU
+	tabList[1].get_node("LabelRelativeVelKm").text += str(asteroid.relativeVelKm)
+	tabList[1].get_node("LabelRelativeVelMi").text += str(asteroid.relativeVelMi)
+	tabList[1].get_node("LabelMissDistKm").text += str(asteroid.missDistKm)
+	tabList[1].get_node("LabelMissDistMi").text += str(asteroid.missDistMi)
+	tabList[1].get_node("LabelMissDistAu").text += str(asteroid.missDistAU)
 
 
 # Populate the Orbital Element Tab using Parent data

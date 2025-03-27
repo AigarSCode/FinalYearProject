@@ -37,6 +37,12 @@ var scaleVal:int
 var start_pos:Vector3
 var target_pos:Vector3
 
+# Info UI
+var asteroidInfoMarker:Marker3D
+var displayingUI:bool = false
+var infoBox:Resource = preload("res://scenes/info_box.tscn")
+var infoBoxInstance
+
 # Simulation time frame, 1 second is equal to 1 day
 var simTimeFrame:float = 1.0
 var elapsed_time:float = 0.0
@@ -47,6 +53,7 @@ var i:int = 0
 var init_complete:bool = false
 var start_movement:bool = false
 var is_paused:bool = false
+var ui_ready:bool = false
 
 # Total time elapsed
 var total_time:float = 0
@@ -77,7 +84,7 @@ func _ready() -> void:
 	make_api_request(api_horizons)
 
 
-func _physics_process(delta):
+func _process(delta):
 	
 	if init_complete and start_movement:
 		# Move the object to the target position from the starting position over 1 second
@@ -162,9 +169,13 @@ func _http_request_completed(result, response_code, headers, body) -> void:
 	json.parse(body.get_string_from_utf8())
 	#print("JSON for ID: " + str(asteroidNeoWsID) + " is: " + str(json.data))
 	# Extract the Result of the Query (Contains the Vector Table)
-	api_response = json.get_data().result
 	
-	extract_vector_table_elements()
+	if init_complete:
+		api_response = json.get_data()
+		extract_asteroid_orbital_data(api_response)
+	else:
+		api_response = json.get_data().result
+		extract_vector_table_elements()
 
 
 # Taking the Result of the Query and extracting the Vector Table only
@@ -265,4 +276,26 @@ func extract_asteroid_orbital_data(orbital_data):
 	producer = otherOrbit.producer
 	earliestObs = otherOrbit.first_obs
 	latestObs = otherOrbit.last_obs
+
+
+# Function to display the Information Box about the asteroid
+func displayInfoBox() -> void:
+	get_asteroid_orbital_data()
+	# Issue, not enough time between call and making instance
+	# Need to wait between. Also block additional calls if made already
+	await get_tree().create_timer(0.15).timeout
 	
+	if init_complete and start_movement and ui_ready:
+		if displayingUI:
+			infoBoxInstance.visible = false
+			displayingUI = !displayingUI
+		else:
+			if infoBoxInstance != null:
+				infoBoxInstance.visible = true
+			else:
+				infoBoxInstance = infoBox.instantiate()
+				add_child(infoBoxInstance)
+				
+				infoBoxInstance.global_position = asteroidInfoMarker.global_position
+			
+			displayingUI = !displayingUI

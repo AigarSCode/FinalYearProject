@@ -1,13 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://d1st5o15wf5ac"]
+[gd_scene load_steps=5 format=3 uid="uid://d1st5o15wf5ac"]
 
 [ext_resource type="Script" uid="uid://ceq4iv7iqah24" path="res://scenes/asteroid.gd" id="1_8v4dh"]
 [ext_resource type="Material" uid="uid://efphtpl7eubk" path="res://materials/moonMaterial.tres" id="2_4hbyb"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_8v4dh"]
+
 [sub_resource type="SphereMesh" id="SphereMesh_gpmln"]
 material = ExtResource("2_4hbyb")
 
-[node name="Asteroid" type="Node3D"]
+[node name="Asteroid" type="StaticBody3D"]
 script = ExtResource("1_8v4dh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_8v4dh")
 
 [node name="AsteroidMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_gpmln")

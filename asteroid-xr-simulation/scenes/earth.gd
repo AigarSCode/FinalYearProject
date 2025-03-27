@@ -13,6 +13,7 @@ var neows_base_request = "https://api.nasa.gov/neo/rest/v1/feed?api_key=DEMO_KEY
 var neows_request = ""
 var api_response
 var asteroidList
+var numberOfAsteroids:int = 0
 
 # Get todays date
 var date = Time.get_date_string_from_system()
@@ -71,8 +72,10 @@ func create_api_request() -> void:
 # Function instantiates x number of asteroids from the NEoWs API response 
 func create_asteroids() -> void:
 	for asteroid in asteroidList:
+		numberOfAsteroids += 1
 		# Instantiate Asteroid Scene
 		var asteroidInstance = asteroidScene.instantiate()
+		asteroidInstance.name = "asteroid_" + str(numberOfAsteroids)
 		
 		# Set Invisibile
 		asteroidInstance.get_node("AsteroidMesh").visible = false
@@ -82,6 +85,7 @@ func create_asteroids() -> void:
 		
 		# Set 0,0,0 coordinates
 		asteroidInstance.position = Vector3(0,0,0)
+		asteroidInstance.asteroidInfoMarker = $"../AsteroidInfoUIMarker"
 		
 		# Assign ID and NEO reference ID 
 		asteroidInstance.asteroidID = asteroid.id

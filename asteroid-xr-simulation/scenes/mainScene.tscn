@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dq7hc5yhg1vou"]
+[gd_scene load_steps=10 format=3 uid="uid://dq7hc5yhg1vou"]
 
 [ext_resource type="Script" uid="uid://qbklfeuu074o" path="res://scenes/main_scene.gd" id="1_1jq6i"]
 [ext_resource type="Script" uid="uid://b64kcovck67ba" path="res://scenes/earth.gd" id="1_w16ng"]
-[ext_resource type="Script" uid="uid://c1igp6w7ysk7u" path="res://scenes/camera_movement.gd" id="2_0yhlv"]
 [ext_resource type="Texture2D" uid="uid://c0j17pybsxdhw" path="res://materials/8k_earth_daymap.jpg" id="2_w16ng"]
+[ext_resource type="Script" uid="uid://bk1gmi1cujosb" path="res://scenes/xrcontroller.gd" id="5_1jq6i"]
+[ext_resource type="Material" uid="uid://cie00yl1wk52m" path="res://materials/rayMaterial.tres" id="6_al2iq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1jq6i"]
 albedo_texture = ExtResource("2_w16ng")
@@ -17,6 +18,12 @@ height = 4.0
 background_color = Color(0.646029, 0.646029, 0.646029, 1)
 ambient_light_color = Color(0.458405, 0.458405, 0.458405, 1)
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_dmtm4"]
+material = ExtResource("6_al2iq")
+top_radius = 0.005
+bottom_radius = 0.005
+height = 5.0
+
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_1jq6i")
 
@@ -26,12 +33,6 @@ script = ExtResource("1_w16ng")
 [node name="EarthMesh" type="MeshInstance3D" parent="Earth"]
 mesh = SubResource("SphereMesh_1pxj5")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.969906, 0.24348, 0, -0.24348, 0.969906, 0, 0, 250)
-script = ExtResource("2_0yhlv")
-sensitivity = 200.0
-speed = 50.0
-
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.869788, 2.15683e-08, -0.493426, 0.493426, -3.80196e-08, 0.869788, 1.03154e-16, -1, -4.37114e-08, -83.1232, 100, 0)
 
@@ -39,12 +40,32 @@ transform = Transform3D(0.869788, 2.15683e-08, -0.493426, 0.493426, -3.80196e-08
 environment = SubResource("Environment_ldj8n")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.5, -10, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.5, 0, 0)
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 
 [node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
 tracker = &"left_hand"
+script = ExtResource("5_1jq6i")
+
+[node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/LeftHand"]
+target_position = Vector3(0, 0, -5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/LeftHand"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2.5)
+mesh = SubResource("CylinderMesh_dmtm4")
 
 [node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 tracker = &"right_hand"
+script = ExtResource("5_1jq6i")
+
+[node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/RightHand"]
+target_position = Vector3(0, 0, -5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/RightHand"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2.5)
+mesh = SubResource("CylinderMesh_dmtm4")
+skeleton = NodePath("../../LeftHand")
+
+[node name="AsteroidInfoUIMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 3)
