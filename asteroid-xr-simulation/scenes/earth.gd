@@ -14,27 +14,57 @@ var neows_request = ""
 var api_response
 var asteroidList
 var numberOfAsteroids:int = 0
+var numberOfReadyAsteroids:int = 0
 
 # Get todays date
 var date = Time.get_date_string_from_system()
+var start_date:String
+var stop_date:String
+var current_date
+var current_date_counter
+var date_range_strings:Array
+var start_movement:bool = false
+@onready var dateBoxScene = $"../DateBox"
+# Days forward and backward in the simulation
+var date_range = 7
+var total_date_range = 15
+
+var simTimeFrame:float = 1.0
+var elapsed_time:float = 0.0
 
 # HTTPRequest Node for API calls
 var httprequestNode:HTTPRequest
 
 
 func _ready() -> void:
+	# Set date range
+	current_date_counter = 0
+	set_date_range()
+	current_date = date_range_strings[current_date_counter]
+	
 	# Create a HTTPRequest Node and connect
 	httprequestNode = HTTPRequest.new()
 	add_child(httprequestNode)
 	httprequestNode.request_completed.connect(self._http_request_completed)
 	
 	create_api_request()
-	
 	make_api_request()
 
 
+# Asteroid Movement Moved to Earth to reduce complexity of individual asteroid calculation
 func _process(delta: float) -> void:
-	pass
+	
+	# Move all asteroids
+	if start_movement:
+		elapsed_time += delta
+		var weight = elapsed_time / simTimeFrame
+		move_asteroids(weight)
+		if elapsed_time >= simTimeFrame:
+			elapsed_time = 0.0
+			# Change UI date
+			update_current_date()
+			# Calculate asteroid target position
+			calculate_next_positions()
 
 
 # Make HTTP Request
@@ -45,7 +75,7 @@ func make_api_request():
 
 
 # API Response handling function
-func _http_request_completed(result, response_code, headers, body) -> void:
+func _http_request_completed(_result, _response_code, _headers, body) -> void:
 	var json = JSON.new()
 	json.parse(body.get_string_from_utf8())
 	api_response = json.get_data()
@@ -76,6 +106,9 @@ func create_asteroids() -> void:
 		# Instantiate Asteroid Scene
 		var asteroidInstance = asteroidScene.instantiate()
 		asteroidInstance.name = "asteroid_" + str(numberOfAsteroids)
+		
+		# Connect asteroid ready signal for movement
+		asteroidInstance.connect("initComplete", Callable(self, "_on_asteroid_init_completed"))
 		
 		# Set Invisibile
 		asteroidInstance.get_node("AsteroidMesh").visible = false
@@ -117,15 +150,26 @@ func create_asteroids() -> void:
 		# Wait before sending another request
 		# Fixes issue when sending all requests at once
 		await get_tree().create_timer(0.5).timeout
-	
-	# Start asteroid movement
-	activate_asteroids()
 
 
-# Start asteroid movement all at the same time
-func activate_asteroids():
+# Function to move asteroids to next position
+func move_asteroids(weight) -> void:
 	for asteroid in asteroidInstances:
-		asteroid.start_movement = true
+		asteroid.move_asteroid(weight)
+
+
+# Calculate next position of all asteroids
+func calculate_next_positions() -> void:
+	for asteroid in asteroidInstances:
+		asteroid.create_next_target_position()
+
+
+# Counter to check if all asteroids are ready to move
+func _on_asteroid_init_completed() -> void:
+	numberOfReadyAsteroids += 1
+	
+	if numberOfReadyAsteroids == numberOfAsteroids:
+		start_movement = true
 
 
 # Set a Random Texture to the asteroid instance
@@ -138,3 +182,47 @@ func set_asteroid_texture(asteroidInstance) -> void:
 	asteroidMaterial.albedo_texture = asteroidTextures[randomNum]
 	
 	mesh.set_surface_override_material(0, asteroidMaterial)
+
+
+# Clears the current asteroids from the world
+func clear_asteroids() -> void:
+	for asteroid in asteroidList:
+		# Close UI before deleting
+		if asteroid.displayingUI:
+			asteroid.displayInfoBox()
+		asteroid.free()
+
+
+# Set the date range, "date_range" days back and "date_range" forward
+func set_date_range() -> void:
+	var date_back = Time.get_datetime_dict_from_system()
+	var date_forw = date_back.duplicate(true)
+	
+	# Date needs to be converted to unix time before being able to add 7 days and take away 7 days
+	var unix_time_back = Time.get_unix_time_from_datetime_dict(date_back) - (date_range * 86400)
+	var unix_time_forw = Time.get_unix_time_from_datetime_dict(date_forw) + (date_range * 86400)
+	
+	# Get only the date part (YYYY-MM-DD) of the datetime_string (YYYY-MM-DD HH:MM:SS)
+	start_date = Time.get_datetime_string_from_unix_time(unix_time_back, true).split(" ")[0]
+	stop_date = Time.get_datetime_string_from_unix_time(unix_time_forw, true).split(" ")[0]
+	
+	# Get entire date range as strings for each day
+	for i in range(0, total_date_range):
+		var unix_date = unix_time_back + (i * 86400)
+		
+		# Get only the date part (YYYY-MM-DD) of the datetime_string (YYYY-MM-DD HH:MM:SS)
+		date_range_strings.append(Time.get_datetime_string_from_unix_time(unix_date, true).split(" ")[0])
+		
+
+# Increments the current date string by 1 day and Changes the DateBox UI to reflect that
+func update_current_date() -> void:
+	
+	if current_date_counter == total_date_range:
+		current_date_counter = 0
+	else:
+		current_date = date_range_strings[current_date_counter]
+		
+		# Set the date on the DateBox UI
+		dateBoxScene.get_node("LabelDate").text = current_date
+		
+		current_date_counter += 1

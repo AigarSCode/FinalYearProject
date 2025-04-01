@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccv6sxoyme7uf"]
+
+[ext_resource type="Material" uid="uid://bqpuuk8wimcvo" path="res://materials/backgroundMaterial.tres" id="1_w32eu"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_26015"]
+size = Vector2(1.1, 0.5)
+
+[node name="DateBox" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = ExtResource("1_w32eu")
+mesh = SubResource("QuadMesh_26015")
+
+[node name="LabelDateTitle" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+text = "Current Date"
+
+[node name="LabelDate" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)

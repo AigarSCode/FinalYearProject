@@ -3,13 +3,10 @@
 [ext_resource type="Script" uid="uid://do6mopilcca10" path="res://scenes/info_box.gd" id="1_d5sr5"]
 [ext_resource type="Material" uid="uid://5qm2xd5k1m43" path="res://materials/ButtonSelected.tres" id="1_piijq"]
 [ext_resource type="Material" uid="uid://ds2ed7gfh2x0t" path="res://materials/ButtonUnselected.tres" id="2_d5sr5"]
+[ext_resource type="Material" uid="uid://bqpuuk8wimcvo" path="res://materials/backgroundMaterial.tres" id="2_ww10x"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c70f3"]
 size = Vector3(0.5, 0.5, 0)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c70f3"]
-transparency = 1
-albedo_color = Color(0.0117647, 0.0941176, 0.141176, 0.305882)
 
 [sub_resource type="QuadMesh" id="QuadMesh_tjcum"]
 size = Vector2(0.5, 0.5)
@@ -37,7 +34,7 @@ shape = SubResource("BoxShape3D_c70f3")
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.001)
-material_override = SubResource("StandardMaterial3D_c70f3")
+material_override = ExtResource("2_ww10x")
 mesh = SubResource("QuadMesh_tjcum")
 skeleton = NodePath("")
 

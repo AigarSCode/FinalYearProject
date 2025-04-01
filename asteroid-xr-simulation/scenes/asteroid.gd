@@ -42,6 +42,7 @@ var asteroidInfoMarker:Marker3D
 var displayingUI:bool = false
 var infoBox:Resource = preload("res://scenes/info_box.tscn")
 var infoBoxInstance
+var ui_data_requested:bool = false
 
 # Simulation time frame, 1 second is equal to 1 day
 var simTimeFrame:float = 1.0
@@ -54,6 +55,7 @@ var init_complete:bool = false
 var start_movement:bool = false
 var is_paused:bool = false
 var ui_ready:bool = false
+signal initComplete
 
 # Total time elapsed
 var total_time:float = 0
@@ -65,6 +67,8 @@ var api_response
 var vector_table
 
 var date = Time.get_date_string_from_system()
+# Days forward and backward in the simulation
+var date_range = 7
 var start_time
 var stop_time
 
@@ -85,32 +89,57 @@ func _ready() -> void:
 
 
 func _process(delta):
-	
-	if init_complete and start_movement:
-		# Move the object to the target position from the starting position over 1 second
-		# Once moved to target, increase array index, set start position to current position, recalculate target and continue moving
-		if elapsed_time < simTimeFrame:
-			elapsed_time += delta
-			total_time += delta
-			var weight = elapsed_time / simTimeFrame
-			global_position = start_pos.slerp(target_pos, weight)
-		else:
-			if i < arrayX.size() - 2:
-				i += 1
-				elapsed_time = 0.0
-				start_pos = global_position
-				target_pos = calculate_target_vector()
-				
-			else:
-				i = 0
-				elapsed_time = 0.0
-				start_pos = global_position
-				target_pos = calculate_target_vector()
+	pass
+	#if init_complete and start_movement:
+		## Move the object to the target position from the starting position over 1 second
+		## Once moved to target, increase array index, set start position to current position, recalculate target and continue moving
+		#if elapsed_time < simTimeFrame:
+			#elapsed_time += delta
+			#total_time += delta
+			#var weight = elapsed_time / simTimeFrame
+			#global_position = start_pos.slerp(target_pos, weight)
+		#else:
+			#if i < arrayX.size() - 1:
+				#print("i is: " + str(i))
+				#
+				#elapsed_time = 0.0
+				#start_pos = global_position
+				#target_pos = calculate_target_vector()
+				#i += 1
+			#else:
+				#print("i is: " + str(i))
+				#
+				#elapsed_time = 0.0
+				#start_pos = global_position
+				#target_pos = calculate_target_vector()
+				#i = 0
 
 # Calculate and return a Vector3 for a position
 func calculate_target_vector():
 	return Vector3((arrayX[i] / scaleVal), (arrayY[i] / scaleVal), (arrayZ[i] / scaleVal))
 
+
+# Move asteroid to the next point
+func move_asteroid(weight) -> void:
+	#if i == 0:
+		#global_position = Vector3((arrayX[0] / scaleVal), (arrayY[0] / scaleVal), (arrayZ[0] / scaleVal))
+	#else:
+	global_position = start_pos.slerp(target_pos, weight)
+
+
+# Calculate next position of asteroid
+func create_next_target_position() -> void:
+	if init_complete:
+		if i < arrayX.size() - 1:
+			elapsed_time = 0.0
+			start_pos = global_position
+			target_pos = calculate_target_vector()
+			i += 1
+		else:
+			elapsed_time = 0.0
+			start_pos = global_position
+			target_pos = calculate_target_vector()
+			i = 0
 
 # Function for setting initial values
 func init_elements() -> void:
@@ -120,6 +149,7 @@ func init_elements() -> void:
 	target_pos = calculate_target_vector()
 	$AsteroidMesh.visible = true
 	init_complete = true
+	emit_signal("initComplete")
 
 
 # Construct the API request string
@@ -152,8 +182,8 @@ func set_date_range() -> void:
 	var date_forw = date_back.duplicate(true)
 	
 	# Date needs to be converted to unix time before being able to add 7 days and take away 7 days
-	var unix_time_back = Time.get_unix_time_from_datetime_dict(date_back) - (7 * 86400)
-	var unix_time_forw = Time.get_unix_time_from_datetime_dict(date_forw) + (7 * 86400)
+	var unix_time_back = Time.get_unix_time_from_datetime_dict(date_back) - (date_range * 86400)
+	var unix_time_forw = Time.get_unix_time_from_datetime_dict(date_forw) + (date_range * 86400)
 	
 	date_back = Time.get_datetime_dict_from_unix_time(unix_time_back)
 	date_forw = Time.get_datetime_dict_from_unix_time(unix_time_forw)
@@ -164,7 +194,7 @@ func set_date_range() -> void:
 
 
 # Function that is called when an API request is completed, used to extract response body
-func _http_request_completed(result, response_code, headers, body) -> void:
+func _http_request_completed(result, _response_code, _headers, body) -> void:
 	var json = JSON.new()
 	json.parse(body.get_string_from_utf8())
 	#print("JSON for ID: " + str(asteroidNeoWsID) + " is: " + str(json.data))
@@ -251,6 +281,7 @@ func extract_xyz_coordinates() -> void:
 func get_asteroid_orbital_data():
 	var request_orbital_data_url = sbdb_base_request + str(asteroidNeoWsID)
 	
+	ui_data_requested = true
 	make_api_request(request_orbital_data_url)
 
 
@@ -276,16 +307,26 @@ func extract_asteroid_orbital_data(orbital_data):
 	producer = otherOrbit.producer
 	earliestObs = otherOrbit.first_obs
 	latestObs = otherOrbit.last_obs
+	
+	# Call displayInfoBox for UI
+	ui_ready = true
+	displayInfoBox()
+
+
+# Function that runs UI population processes when an asteroid is pressed
+func createInfoBox() -> void:
+	# Stop repeated calls if UI data was already requested/populated
+	if !ui_data_requested:
+		get_asteroid_orbital_data()
+	else:
+		displayInfoBox()
 
 
 # Function to display the Information Box about the asteroid
 func displayInfoBox() -> void:
-	get_asteroid_orbital_data()
-	# Issue, not enough time between call and making instance
-	# Need to wait between. Also block additional calls if made already
-	await get_tree().create_timer(0.15).timeout
-	
+	# Display only after all conditions are met
 	if init_complete and start_movement and ui_ready:
+		# Show/hide UI or Create UI instance
 		if displayingUI:
 			infoBoxInstance.visible = false
 			displayingUI = !displayingUI

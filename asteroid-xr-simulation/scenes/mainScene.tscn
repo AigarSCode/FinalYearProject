@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://dq7hc5yhg1vou"]
+[gd_scene load_steps=11 format=3 uid="uid://dq7hc5yhg1vou"]
 
 [ext_resource type="Script" uid="uid://qbklfeuu074o" path="res://scenes/main_scene.gd" id="1_1jq6i"]
 [ext_resource type="Script" uid="uid://b64kcovck67ba" path="res://scenes/earth.gd" id="1_w16ng"]
 [ext_resource type="Texture2D" uid="uid://c0j17pybsxdhw" path="res://materials/8k_earth_daymap.jpg" id="2_w16ng"]
 [ext_resource type="Script" uid="uid://bk1gmi1cujosb" path="res://scenes/xrcontroller.gd" id="5_1jq6i"]
+[ext_resource type="PackedScene" uid="uid://ccv6sxoyme7uf" path="res://scenes/date_box.tscn" id="6_1jq6i"]
 [ext_resource type="Material" uid="uid://cie00yl1wk52m" path="res://materials/rayMaterial.tres" id="6_al2iq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1jq6i"]
@@ -69,3 +70,6 @@ skeleton = NodePath("../../LeftHand")
 
 [node name="AsteroidInfoUIMarker" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 3)
+
+[node name="DateBox" parent="." instance=ExtResource("6_1jq6i")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.3, -0.5, 0)
