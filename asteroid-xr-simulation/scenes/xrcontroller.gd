@@ -30,10 +30,16 @@ func _process(_delta: float) -> void:
 			if triggerPressed or gripPressed:
 				var infoBox = objectHit.get_parent()
 				infoBox.switchTab(objectHit.name)
+				
 		# Asteroid Clicks
 		elif objectHit.name.contains("asteroid"):
 			if triggerPressed or gripPressed:
 				objectHit.createInfoBox()
+				
+		# Speed button Clicks
+		elif objectHit.name in ["Button1x", "Button2x", "Button3x", "Button0_5x", "Button0_3x"]:
+			if triggerPressed or gripPressed:
+				objectHit.switchSpeed(objectHit.name)
 
 
 # Change the ray mesh length to match ray length

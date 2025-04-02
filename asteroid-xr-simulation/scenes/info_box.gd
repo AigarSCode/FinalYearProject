@@ -3,6 +3,7 @@ extends StaticBody3D
 var asteroid:Node3D
 var activeTab:String = "AsteroidInformationTab"
 @onready var tabList = [$AsteroidInformationTab, $CloseApproachDataTab, $OrbitalElementTab]
+@onready var user = get_node("/../../XROrigin3D/XRCamera3D")
 
 var buttonSelected = preload("res://materials/ButtonSelected.tres")
 var buttonUnselected = preload("res://materials/ButtonUnselected.tres")
@@ -18,6 +19,12 @@ func _ready() -> void:
 	populateInfoTab()
 	populateApproachTab()
 	populateElementTab()
+
+
+# Always face the user
+func _process(delta: float) -> void:
+	look_at(user.global_position, Vector3.UP)
+	rotate_y(deg_to_rad(180))
 
 
 # Populate the Information Tab using Parent data

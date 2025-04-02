@@ -1,0 +1,115 @@
+[gd_scene load_steps=13 format=3 uid="uid://bjes7rksbv7kd"]
+
+[ext_resource type="Material" uid="uid://bqpuuk8wimcvo" path="res://materials/backgroundMaterial.tres" id="1_heiec"]
+[ext_resource type="Script" uid="uid://bipytntqnvwkk" path="res://scenes/speed_box.gd" id="1_pvmvm"]
+[ext_resource type="Material" uid="uid://5qm2xd5k1m43" path="res://materials/ButtonSelected.tres" id="2_55hdj"]
+[ext_resource type="Material" uid="uid://ds2ed7gfh2x0t" path="res://materials/ButtonUnselected.tres" id="3_55hdj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pvmvm"]
+size = Vector3(0.5, 0.15, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_12522"]
+size = Vector2(0.5, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wbuy2"]
+size = Vector3(0.5, 0.5, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pvmvm"]
+material = ExtResource("2_55hdj")
+size = Vector3(0.5, 0.5, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_12522"]
+material = ExtResource("3_55hdj")
+size = Vector3(0.5, 0.5, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wbuy2"]
+material = ExtResource("3_55hdj")
+size = Vector3(0.5, 0.5, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2vjfp"]
+material = ExtResource("3_55hdj")
+size = Vector3(0.5, 0.5, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_la4wn"]
+material = ExtResource("3_55hdj")
+size = Vector3(0.5, 0.5, 0.1)
+
+[node name="SpeedBox" type="StaticBody3D"]
+script = ExtResource("1_pvmvm")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_pvmvm")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = ExtResource("1_heiec")
+mesh = SubResource("QuadMesh_12522")
+
+[node name="LabelTitle" type="Label3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.0500274, 0)
+text = "Simulation Speed"
+font_size = 46
+
+[node name="Button1x" type="StaticBody3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, -0.015364, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Button1x"]
+shape = SubResource("BoxShape3D_wbuy2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Button1x"]
+mesh = SubResource("BoxMesh_pvmvm")
+
+[node name="Label3D" type="Label3D" parent="Button1x"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.051)
+text = "1x"
+
+[node name="Button2x" type="StaticBody3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.1, -0.015364, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Button2x"]
+shape = SubResource("BoxShape3D_wbuy2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Button2x"]
+mesh = SubResource("BoxMesh_12522")
+
+[node name="Label3D" type="Label3D" parent="Button2x"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.051)
+text = "2x"
+
+[node name="Button3x" type="StaticBody3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.2, -0.015364, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Button3x"]
+shape = SubResource("BoxShape3D_wbuy2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Button3x"]
+mesh = SubResource("BoxMesh_wbuy2")
+
+[node name="Label3D" type="Label3D" parent="Button3x"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.051)
+text = "3x"
+
+[node name="Button0_5x" type="StaticBody3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.1, -0.015364, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Button0_5x"]
+shape = SubResource("BoxShape3D_wbuy2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Button0_5x"]
+mesh = SubResource("BoxMesh_2vjfp")
+
+[node name="Label3D" type="Label3D" parent="Button0_5x"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.051)
+text = "0.5x"
+
+[node name="Button0_3x" type="StaticBody3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.2, -0.015364, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Button0_3x"]
+shape = SubResource("BoxShape3D_wbuy2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Button0_3x"]
+mesh = SubResource("BoxMesh_la4wn")
+
+[node name="Label3D" type="Label3D" parent="Button0_3x"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.051)
+text = "0.3x"

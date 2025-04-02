@@ -31,6 +31,7 @@ var total_date_range = 15
 
 var simTimeFrame:float = 1.0
 var elapsed_time:float = 0.0
+var simSpeed:float = 1.0
 
 # HTTPRequest Node for API calls
 var httprequestNode:HTTPRequest
@@ -54,12 +55,13 @@ func _ready() -> void:
 # Asteroid Movement Moved to Earth to reduce complexity of individual asteroid calculation
 func _process(delta: float) -> void:
 	
+	#if !start_movement:
+	
 	# Move all asteroids
 	if start_movement:
-		elapsed_time += delta
+		elapsed_time += delta * simSpeed
 		if elapsed_time >= simTimeFrame:
 			elapsed_time -= simTimeFrame
-			#elapsed_time = 0.0
 			# Change UI date
 			update_current_date()
 			# Calculate asteroid target position
@@ -171,6 +173,9 @@ func _on_asteroid_init_completed() -> void:
 	
 	if numberOfReadyAsteroids == numberOfAsteroids:
 		start_movement = true
+	
+	# Hide loading box
+	$"../LoadingBox".visible = false
 
 
 # Set a Random Texture to the asteroid instance
@@ -226,5 +231,8 @@ func update_current_date() -> void:
 	
 	# Set the date on the DateBox UI
 	dateBoxScene.get_node("LabelDate").text = current_date
-	
-	#current_date_counter += 1
+
+
+# Change Sim Speed, set by SpeedBox UI
+func changeSpeed(speed) -> void:
+	simSpeed = speed

@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://ccv6sxoyme7uf"]
+[gd_scene load_steps=4 format=3 uid="uid://ccv6sxoyme7uf"]
 
+[ext_resource type="Script" uid="uid://cc0iw42qcod0e" path="res://scenes/look_at_script.gd" id="1_26015"]
 [ext_resource type="Material" uid="uid://bqpuuk8wimcvo" path="res://materials/backgroundMaterial.tres" id="1_w32eu"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_26015"]
 size = Vector2(1.1, 0.5)
 
 [node name="DateBox" type="Node3D"]
+script = ExtResource("1_26015")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 material_override = ExtResource("1_w32eu")
