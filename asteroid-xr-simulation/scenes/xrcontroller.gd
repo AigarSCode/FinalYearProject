@@ -48,4 +48,4 @@ func updateRayMesh(rayTip) -> void:
 	
 	ray_mesh.scale.z = lengthToTarget / 5.0
 	# Find the halfway point of the controller and ray tip and place ray mesh there
-	ray_mesh.global_transform.origin = global_transform.origin + (rayTip - global_transform.origin) / 2
+	ray_mesh.global_transform.origin = global_transform.origin 	+ (rayTip - global_transform.origin) / 2

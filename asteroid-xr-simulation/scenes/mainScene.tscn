@@ -81,3 +81,7 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.75,
 
 [node name="SpeedBox" parent="." instance=ExtResource("8_dmtm4")]
 transform = Transform3D(-1.31134e-07, 0, -3, 0, 3, 0, 3, 0, -1.31134e-07, -2.75, -0.4, 0)
+collision_layer = 0
+collision_mask = 0
+
+[editable path="SpeedBox"]

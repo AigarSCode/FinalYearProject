@@ -35,7 +35,6 @@ material = ExtResource("3_55hdj")
 size = Vector3(0.5, 0.5, 0.1)
 
 [node name="SpeedBox" type="StaticBody3D"]
-script = ExtResource("1_pvmvm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_pvmvm")
@@ -51,6 +50,7 @@ font_size = 46
 
 [node name="Button1x" type="StaticBody3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, -0.015364, 0)
+script = ExtResource("1_pvmvm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Button1x"]
 shape = SubResource("BoxShape3D_wbuy2")
@@ -64,6 +64,7 @@ text = "1x"
 
 [node name="Button2x" type="StaticBody3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.1, -0.015364, 0)
+script = ExtResource("1_pvmvm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Button2x"]
 shape = SubResource("BoxShape3D_wbuy2")
@@ -77,6 +78,7 @@ text = "2x"
 
 [node name="Button3x" type="StaticBody3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.2, -0.015364, 0)
+script = ExtResource("1_pvmvm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Button3x"]
 shape = SubResource("BoxShape3D_wbuy2")
@@ -90,6 +92,7 @@ text = "3x"
 
 [node name="Button0_5x" type="StaticBody3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.1, -0.015364, 0)
+script = ExtResource("1_pvmvm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Button0_5x"]
 shape = SubResource("BoxShape3D_wbuy2")
@@ -103,6 +106,7 @@ text = "0.5x"
 
 [node name="Button0_3x" type="StaticBody3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.2, -0.015364, 0)
+script = ExtResource("1_pvmvm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Button0_3x"]
 shape = SubResource("BoxShape3D_wbuy2")
