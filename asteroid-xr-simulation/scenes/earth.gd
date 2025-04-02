@@ -57,14 +57,15 @@ func _process(delta: float) -> void:
 	# Move all asteroids
 	if start_movement:
 		elapsed_time += delta
-		var weight = elapsed_time / simTimeFrame
-		move_asteroids(weight)
 		if elapsed_time >= simTimeFrame:
-			elapsed_time = 0.0
+			elapsed_time -= simTimeFrame
+			#elapsed_time = 0.0
 			# Change UI date
 			update_current_date()
 			# Calculate asteroid target position
 			calculate_next_positions()
+		var weight = elapsed_time / simTimeFrame
+		move_asteroids(weight)
 
 
 # Make HTTP Request
@@ -207,7 +208,7 @@ func set_date_range() -> void:
 	stop_date = Time.get_datetime_string_from_unix_time(unix_time_forw, true).split(" ")[0]
 	
 	# Get entire date range as strings for each day
-	for i in range(0, total_date_range):
+	for i in range(total_date_range):
 		var unix_date = unix_time_back + (i * 86400)
 		
 		# Get only the date part (YYYY-MM-DD) of the datetime_string (YYYY-MM-DD HH:MM:SS)
@@ -216,13 +217,14 @@ func set_date_range() -> void:
 
 # Increments the current date string by 1 day and Changes the DateBox UI to reflect that
 func update_current_date() -> void:
+	current_date_counter += 1
 	
-	if current_date_counter == total_date_range:
+	if current_date_counter >= total_date_range:
 		current_date_counter = 0
-	else:
-		current_date = date_range_strings[current_date_counter]
-		
-		# Set the date on the DateBox UI
-		dateBoxScene.get_node("LabelDate").text = current_date
-		
-		current_date_counter += 1
+	
+	current_date = date_range_strings[current_date_counter]
+	
+	# Set the date on the DateBox UI
+	dateBoxScene.get_node("LabelDate").text = current_date
+	
+	#current_date_counter += 1

@@ -121,22 +121,22 @@ func calculate_target_vector():
 
 # Move asteroid to the next point
 func move_asteroid(weight) -> void:
-	#if i == 0:
-		#global_position = Vector3((arrayX[0] / scaleVal), (arrayY[0] / scaleVal), (arrayZ[0] / scaleVal))
-	#else:
-	global_position = start_pos.slerp(target_pos, weight)
+	if i == 0:
+		global_position = Vector3((arrayX[0] / scaleVal), (arrayY[0] / scaleVal), (arrayZ[0] / scaleVal))
+	else:
+		# Movement Smoothing using the Smoothstep formula for ease in and out, chosen for better viewing
+		var smooth_weight = weight * weight * (3.0 - 2.0 * weight)
+		global_position = start_pos.lerp(target_pos, smooth_weight)
 
 
 # Calculate next position of asteroid
 func create_next_target_position() -> void:
 	if init_complete:
 		if i < arrayX.size() - 1:
-			elapsed_time = 0.0
 			start_pos = global_position
 			target_pos = calculate_target_vector()
 			i += 1
 		else:
-			elapsed_time = 0.0
 			start_pos = global_position
 			target_pos = calculate_target_vector()
 			i = 0
