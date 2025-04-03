@@ -3,7 +3,7 @@ extends StaticBody3D
 var asteroid:Node3D
 var activeTab:String = "AsteroidInformationTab"
 @onready var tabList = [$AsteroidInformationTab, $CloseApproachDataTab, $OrbitalElementTab]
-@onready var user = get_node("/../../XROrigin3D/XRCamera3D")
+@onready var user = get_node("/root/Node3D/XROrigin3D/XRCamera3D")
 
 var buttonSelected = preload("res://materials/ButtonSelected.tres")
 var buttonUnselected = preload("res://materials/ButtonUnselected.tres")
@@ -23,8 +23,12 @@ func _ready() -> void:
 
 # Always face the user
 func _process(delta: float) -> void:
-	look_at(user.global_position, Vector3.UP)
-	rotate_y(deg_to_rad(180))
+	if user != null:
+		# Issue encountered, Users height was not taken into account. Now height is offset to face the user
+		var user_camera_pos = user.global_position
+		user_camera_pos.y = global_position.y
+		look_at(user_camera_pos, Vector3.UP)
+		rotate_y(deg_to_rad(180))
 
 
 # Populate the Information Tab using Parent data

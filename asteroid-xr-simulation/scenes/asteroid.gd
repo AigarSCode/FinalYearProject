@@ -52,7 +52,6 @@ var elapsed_time:float = 0.0
 var i:int = 0
 
 var init_complete:bool = false
-var start_movement:bool = false
 var is_paused:bool = false
 var ui_ready:bool = false
 signal initComplete
@@ -89,30 +88,9 @@ func _ready() -> void:
 
 
 func _process(delta):
-	pass
-	#if init_complete and start_movement:
-		## Move the object to the target position from the starting position over 1 second
-		## Once moved to target, increase array index, set start position to current position, recalculate target and continue moving
-		#if elapsed_time < simTimeFrame:
-			#elapsed_time += delta
-			#total_time += delta
-			#var weight = elapsed_time / simTimeFrame
-			#global_position = start_pos.slerp(target_pos, weight)
-		#else:
-			#if i < arrayX.size() - 1:
-				#print("i is: " + str(i))
-				#
-				#elapsed_time = 0.0
-				#start_pos = global_position
-				#target_pos = calculate_target_vector()
-				#i += 1
-			#else:
-				#print("i is: " + str(i))
-				#
-				#elapsed_time = 0.0
-				#start_pos = global_position
-				#target_pos = calculate_target_vector()
-				#i = 0
+	if displayingUI:
+		infoBoxInstance.global_position = asteroidInfoMarker.global_position
+
 
 # Calculate and return a Vector3 for a position
 func calculate_target_vector():
@@ -140,6 +118,7 @@ func create_next_target_position() -> void:
 			start_pos = global_position
 			target_pos = calculate_target_vector()
 			i = 0
+
 
 # Function for setting initial values
 func init_elements() -> void:
@@ -174,6 +153,7 @@ func make_api_request(request_url):
 	var error = httprequestNode.request(request_url)
 	if error != OK:
 		print("Request Failed with error: " + str(error))
+	print("inside make_api_request")
 
 
 # Setting the date range for the API call, for now this is 7 days back and 7 days forward
@@ -201,6 +181,7 @@ func _http_request_completed(result, _response_code, _headers, body) -> void:
 	# Extract the Result of the Query (Contains the Vector Table)
 	
 	if init_complete:
+		print("inside init_complete _http_request_completed")
 		api_response = json.get_data()
 		extract_asteroid_orbital_data(api_response)
 	else:
@@ -280,13 +261,14 @@ func extract_xyz_coordinates() -> void:
 # Creates Orbital Data API request only when asteroid gets selected
 func get_asteroid_orbital_data():
 	var request_orbital_data_url = sbdb_base_request + str(asteroidNeoWsID)
-	
+	print("Inside get_asteroid_orbital_data")
 	ui_data_requested = true
 	make_api_request(request_orbital_data_url)
 
 
 # Extract all asteroid orbial information for display use
 func extract_asteroid_orbital_data(orbital_data):
+	print("inside extract_asteroid_orbital_data")
 	var elements = orbital_data["orbit"]["elements"]
 	var otherOrbit = orbital_data["orbit"]
 	
@@ -315,17 +297,21 @@ func extract_asteroid_orbital_data(orbital_data):
 
 # Function that runs UI population processes when an asteroid is pressed
 func createInfoBox() -> void:
+	print("In createInfoBox")
 	# Stop repeated calls if UI data was already requested/populated
 	if !ui_data_requested:
 		get_asteroid_orbital_data()
+		print("After get_asteroid_orbital_data")
 	else:
+		print("createInfoBox after ui_data_requested")
 		displayInfoBox()
 
 
 # Function to display the Information Box about the asteroid
 func displayInfoBox() -> void:
+	print("inside displayInfoBox")
 	# Display only after all conditions are met
-	if init_complete and start_movement and ui_ready:
+	if init_complete and ui_ready:
 		# Show/hide UI or Create UI instance
 		if displayingUI:
 			infoBoxInstance.visible = false

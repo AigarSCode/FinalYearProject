@@ -33,6 +33,7 @@ func _process(_delta: float) -> void:
 				
 		# Asteroid Clicks
 		elif objectHit.name.contains("asteroid"):
+			print("Asteroid CLICK: " + objectHit.name)
 			if triggerPressed or gripPressed:
 				objectHit.createInfoBox()
 				
