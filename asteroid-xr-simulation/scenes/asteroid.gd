@@ -153,7 +153,6 @@ func make_api_request(request_url):
 	var error = httprequestNode.request(request_url)
 	if error != OK:
 		print("Request Failed with error: " + str(error))
-	print("inside make_api_request")
 
 
 # Setting the date range for the API call, for now this is 7 days back and 7 days forward
@@ -181,7 +180,6 @@ func _http_request_completed(result, _response_code, _headers, body) -> void:
 	# Extract the Result of the Query (Contains the Vector Table)
 	
 	if init_complete:
-		print("inside init_complete _http_request_completed")
 		api_response = json.get_data()
 		extract_asteroid_orbital_data(api_response)
 	else:
@@ -261,14 +259,13 @@ func extract_xyz_coordinates() -> void:
 # Creates Orbital Data API request only when asteroid gets selected
 func get_asteroid_orbital_data():
 	var request_orbital_data_url = sbdb_base_request + str(asteroidNeoWsID)
-	print("Inside get_asteroid_orbital_data")
+	
 	ui_data_requested = true
 	make_api_request(request_orbital_data_url)
 
 
 # Extract all asteroid orbial information for display use
 func extract_asteroid_orbital_data(orbital_data):
-	print("inside extract_asteroid_orbital_data")
 	var elements = orbital_data["orbit"]["elements"]
 	var otherOrbit = orbital_data["orbit"]
 	
@@ -279,7 +276,11 @@ func extract_asteroid_orbital_data(orbital_data):
 		if element.units == null:
 			element_string = element.title + " = " + str(element.value) + " (" + element.label + ")"
 		else:
-			element_string = element.title + " = " + str(element.value) + " " + element.units + " (" + element.label + ")"
+			if element.name == "i":
+				var inclination_split = element.title.split(";")[0]
+				element_string = inclination_split + " = " + str(element.value) + " " + element.units + " (" + element.label + ")"
+			else:
+				element_string = element.title + " = " + str(element.value) + " " + element.units + " (" + element.label + ")"
 		
 		# Store string in dictionary for use
 		element_data_dictionary[element.name] = element_string
@@ -297,19 +298,15 @@ func extract_asteroid_orbital_data(orbital_data):
 
 # Function that runs UI population processes when an asteroid is pressed
 func createInfoBox() -> void:
-	print("In createInfoBox")
 	# Stop repeated calls if UI data was already requested/populated
 	if !ui_data_requested:
 		get_asteroid_orbital_data()
-		print("After get_asteroid_orbital_data")
 	else:
-		print("createInfoBox after ui_data_requested")
 		displayInfoBox()
 
 
 # Function to display the Information Box about the asteroid
 func displayInfoBox() -> void:
-	print("inside displayInfoBox")
 	# Display only after all conditions are met
 	if init_complete and ui_ready:
 		# Show/hide UI or Create UI instance

@@ -173,9 +173,8 @@ func _on_asteroid_init_completed() -> void:
 	
 	if numberOfReadyAsteroids == numberOfAsteroids:
 		start_movement = true
-	
-	# Hide loading box
-	$"../LoadingBox".visible = false
+		# Hide loading box
+		$"../LoadingBox".visible = false
 
 
 # Set a Random Texture to the asteroid instance
