@@ -55,11 +55,11 @@ text = "Year"
 
 [node name="LabelDaySelect" type="Label3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.3, 0.0629594, 0)
-text = "31"
+text = "1"
 
 [node name="LabelMonthSelect" type="Label3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.0629594, 0)
-text = "September"
+text = "January"
 
 [node name="LabelYearSelect" type="Label3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.3, 0.0629594, 0)

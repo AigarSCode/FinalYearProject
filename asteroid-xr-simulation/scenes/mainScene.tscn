@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dq7hc5yhg1vou"]
+[gd_scene load_steps=15 format=3 uid="uid://dq7hc5yhg1vou"]
 
 [ext_resource type="Script" uid="uid://qbklfeuu074o" path="res://scenes/main_scene.gd" id="1_1jq6i"]
 [ext_resource type="Script" uid="uid://b64kcovck67ba" path="res://scenes/earth.gd" id="1_w16ng"]
@@ -8,6 +8,8 @@
 [ext_resource type="Material" uid="uid://cie00yl1wk52m" path="res://materials/rayMaterial.tres" id="6_al2iq"]
 [ext_resource type="PackedScene" uid="uid://di5k6j8dvsqrg" path="res://scenes/loading_box.tscn" id="7_al2iq"]
 [ext_resource type="PackedScene" uid="uid://bjes7rksbv7kd" path="res://scenes/speed_box.tscn" id="8_dmtm4"]
+[ext_resource type="PackedScene" uid="uid://c4jrhil37wdyq" path="res://scenes/date_picker.tscn" id="9_1xypn"]
+[ext_resource type="Script" uid="uid://cc0iw42qcod0e" path="res://scenes/look_at_script.gd" id="9_2n1xb"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1jq6i"]
 albedo_texture = ExtResource("2_w16ng")
@@ -81,5 +83,9 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1.095
 transform = Transform3D(-1.31134e-07, 0, -3, 0, 3, 0, 3, 0, -1.31134e-07, -1.09551, -0.4, 0)
 collision_layer = 0
 collision_mask = 0
+script = ExtResource("9_2n1xb")
+
+[node name="DatePicker" parent="." instance=ExtResource("9_1xypn")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2, 0, -1.5)
 
 [editable path="SpeedBox"]

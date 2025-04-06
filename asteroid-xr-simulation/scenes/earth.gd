@@ -24,6 +24,7 @@ var current_date
 var current_date_counter
 var date_range_strings:Array
 var start_movement:bool = false
+var date_searchable:bool = true
 @onready var dateBoxScene = $"../DateBox"
 # Days forward and backward in the simulation
 var date_range = 7
@@ -40,7 +41,7 @@ var httprequestNode:HTTPRequest
 func _ready() -> void:
 	# Set date range
 	current_date_counter = 0
-	set_date_range()
+	set_date_range(date)
 	current_date = date_range_strings[current_date_counter]
 	
 	# Create a HTTPRequest Node and connect
@@ -54,9 +55,6 @@ func _ready() -> void:
 
 # Asteroid Movement Moved to Earth to reduce complexity of individual asteroid calculation
 func _process(delta: float) -> void:
-	
-	#if !start_movement:
-	
 	# Move all asteroids
 	if start_movement:
 		elapsed_time += delta * simSpeed
@@ -173,6 +171,8 @@ func _on_asteroid_init_completed() -> void:
 	
 	if numberOfReadyAsteroids == numberOfAsteroids:
 		start_movement = true
+		date_searchable = true
+		
 		# Hide loading box
 		$"../LoadingBox".visible = false
 
@@ -191,16 +191,54 @@ func set_asteroid_texture(asteroidInstance) -> void:
 
 # Clears the current asteroids from the world
 func clear_asteroids() -> void:
-	for asteroid in asteroidList:
+	for asteroid in asteroidInstances:
 		# Close UI before deleting
 		if asteroid.displayingUI:
 			asteroid.displayInfoBox()
 		asteroid.free()
+	asteroidInstances.clear()
 
 
-# Set the date range, "date_range" days back and "date_range" forward
-func set_date_range() -> void:
-	var date_back = Time.get_datetime_dict_from_system()
+# Reset a list of variables before creating new asteroids
+func resetAsteroidVariables() -> void:
+	# Movement Related
+	start_movement = false
+	elapsed_time = 0.0
+	
+	# Loading Box
+	$"../LoadingBox".visible = true
+	
+	# Counters for Asteroid and Date
+	numberOfAsteroids = 0
+	numberOfReadyAsteroids = 0
+	current_date_counter = 0
+
+
+# Search for new asteroids using a User selected Date
+func searchUserDate(userDate) -> void:
+	# Limit searches until the first is complete
+	if date_searchable:
+		date_searchable = false
+		# Clear asteroids and reset some of the variables
+		clear_asteroids()
+		resetAsteroidVariables()
+		
+		# Update Search Date
+		date = userDate
+		set_date_range(userDate)
+		current_date = date_range_strings[current_date_counter]
+		
+		# Run API url creation and Send request
+		create_api_request()
+		make_api_request()
+		
+		# Create asteroids with returned data
+		create_asteroids()
+
+
+# Set the date range, "date_range" days back and forward
+func set_date_range(setDate) -> void:
+	var date_back = setDate
 	var date_forw = date_back.duplicate(true)
 	
 	# Date needs to be converted to unix time before being able to add 7 days and take away 7 days
@@ -217,7 +255,7 @@ func set_date_range() -> void:
 		
 		# Get only the date part (YYYY-MM-DD) of the datetime_string (YYYY-MM-DD HH:MM:SS)
 		date_range_strings.append(Time.get_datetime_string_from_unix_time(unix_date, true).split(" ")[0])
-		
+
 
 # Increments the current date string by 1 day and Changes the DateBox UI to reflect that
 func update_current_date() -> void:

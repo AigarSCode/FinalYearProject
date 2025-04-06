@@ -89,8 +89,8 @@ func decrementDates(option) -> void:
 # Update UI with Date changes
 func updateDateUI() -> void:
 	$LabelDaySelect.text = day
-	$LabelMonthSelect.text = months[month + 1]
+	$LabelMonthSelect.text = months[month]
 	$LabelYearSelect.text = year
 	
 	# Update Date String
-	dateString = str(year) + "-" + months[month + 1] + "-" + str(day)
+	dateString = str(year) + "-" + months[month] + "-" + str(day)

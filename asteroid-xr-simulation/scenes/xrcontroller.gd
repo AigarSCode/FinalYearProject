@@ -3,6 +3,7 @@ extends XRController3D
 @onready var ray = $RayCast3D
 @onready var ray_mesh = $MeshInstance3D
 @onready var datePickerUI = get_node("/root/Node3D/DatePicker")
+@onready var earth = get_node("/root/Node3D/Earth")
 
 func _ready() -> void:
 	pass
@@ -59,8 +60,7 @@ func datePickerOptions(objectHitName) -> void:
 	
 	# Submit search to Earth
 	if objectHitName == "Search":
-		# datePickerUI.dateString
-		pass
+		earth.searchUserDate(datePickerUI.dateString)
 
 
 # Change the ray mesh length to match ray length
