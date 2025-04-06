@@ -29,11 +29,19 @@ func _process(delta: float) -> void:
 func incrementDates(option) -> void:
 	if option == "day":
 		day += 1
-		if day > daysInMonth[month]:
-			day = 1
+		if month == 1 and year % 4 == 0:
+			if day > 29:
+				day = 1
+		else:
+			if day > daysInMonth[month]:
+				day = 1
 	
 	if option == "month":
-		pass
+		month += 1
+		if month >= months.size():
+			month = 0
+		if day > daysInMonth[month]:
+			day = 1
 	
 	if option == "year":
 		year += 1
@@ -47,16 +55,33 @@ func incrementDates(option) -> void:
 func decrementDates(option) -> void:
 	if option == "day":
 		day -= 1
-		if day < 1 or day > daysInMonth[month]:
-			day = daysInMonth[month]
+		if month == 1 and year % 4 == 0:
+			if day < 1:
+				day = 29
+		else:
+			if day < 1:
+				day = daysInMonth[month]
 	
 	if option == "month":
-		pass
+		month -= 1
+		if month < 0:
+			month = months.size() - 1
+		if month == 1 and year % 4 == 0:
+			if day > 29:
+				day = 29
+		if day > daysInMonth[month]:
+			day = daysInMonth[month]
 	
 	if option == "year":
 		year -= 1
 		if year < 1970:
 			year = 2050
+		
+		if month == 1 and year % 4 == 0:
+			if day > 29:
+				day = 29
+		elif day > daysInMonth[month]:
+			day = daysInMonth[month]
 	
 	updateDateUI()
 

@@ -2,6 +2,7 @@ extends XRController3D
 
 @onready var ray = $RayCast3D
 @onready var ray_mesh = $MeshInstance3D
+@onready var datePickerUI = get_node("/root/Node3D/DatePicker")
 
 func _ready() -> void:
 	pass
@@ -41,6 +42,25 @@ func _process(_delta: float) -> void:
 		elif objectHit.name in ["Button1x", "Button2x", "Button3x", "Button0_5x", "Button0_3x"]:
 			if triggerPressed or gripPressed:
 				objectHit.switchSpeed(objectHit.name)
+		
+		elif objectHit.get_parent().name == "DatePicker":
+			if triggerPressed or gripPressed:
+				datePickerOptions(objectHit.name)
+
+
+# Handler for each Date Picker UI button 
+func datePickerOptions(objectHitName) -> void:
+	if objectHitName == "DateUp": datePickerUI.incrementDates("day")
+	if objectHitName == "DateDown": datePickerUI.decrementDates("day")
+	if objectHitName == "MonthUp": datePickerUI.incrementDates("month")
+	if objectHitName == "MonthDown": datePickerUI.decrementDates("month")
+	if objectHitName == "YearUp": datePickerUI.incrementDates("year")
+	if objectHitName == "YearDown": datePickerUI.decrementDates("year")
+	
+	# Submit search to Earth
+	if objectHitName == "Search":
+		# datePickerUI.dateString
+		pass
 
 
 # Change the ray mesh length to match ray length
