@@ -27,6 +27,10 @@ func _process(delta: float) -> void:
 
 # Increment for day, month and year. (Function called from XRControllers)
 func incrementDates(option) -> void:
+	print("Option is: " + option)
+	print("Day is: " + str(day))
+	print("Month is: " + str(months[month]))
+	print("Year is: " + str(year))
 	if option == "day":
 		day += 1
 		if month == 1 and year % 4 == 0:
@@ -88,9 +92,9 @@ func decrementDates(option) -> void:
 
 # Update UI with Date changes
 func updateDateUI() -> void:
-	$LabelDaySelect.text = day
-	$LabelMonthSelect.text = months[month]
-	$LabelYearSelect.text = year
+	$LabelDaySelect.text = str(day)
+	$LabelMonthSelect.text = str(months[month])
+	$LabelYearSelect.text = str(year)
 	
-	# Update Date String
-	dateString = str(year) + "-" + months[month] + "-" + str(day)
+	# Update Date String and add leading zeros
+	dateString = str(year) + "-" + str(month+1).pad_zeros(2) + "-" + str(day).pad_zeros(2)

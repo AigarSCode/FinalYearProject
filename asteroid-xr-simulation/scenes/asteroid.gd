@@ -65,7 +65,7 @@ var api_horizons
 var api_response
 var vector_table
 
-var date = Time.get_date_string_from_system()
+var date:String
 # Days forward and backward in the simulation
 var date_range = 7
 var start_time
@@ -157,19 +157,16 @@ func make_api_request(request_url):
 
 # Setting the date range for the API call, for now this is 7 days back and 7 days forward
 func set_date_range() -> void:
-	var date_back = Time.get_datetime_dict_from_system()
-	var date_forw = date_back.duplicate(true)
+	var date_back = date
+	var date_forw = date_back
 	
 	# Date needs to be converted to unix time before being able to add 7 days and take away 7 days
-	var unix_time_back = Time.get_unix_time_from_datetime_dict(date_back) - (date_range * 86400)
-	var unix_time_forw = Time.get_unix_time_from_datetime_dict(date_forw) + (date_range * 86400)
-	
-	date_back = Time.get_datetime_dict_from_unix_time(unix_time_back)
-	date_forw = Time.get_datetime_dict_from_unix_time(unix_time_forw)
+	var unix_time_back = Time.get_unix_time_from_datetime_string(date_back) - (date_range * 86400)
+	var unix_time_forw = Time.get_unix_time_from_datetime_string(date_forw) + (date_range * 86400)
 	
 	# Get only the date part (YYYY-MM-DD) of the datetime_string (YYYY-MM-DD HH:MM:SS)
-	start_time = start_time + Time.get_datetime_string_from_datetime_dict(date_back, true).split(" ")[0]
-	stop_time = stop_time + Time.get_datetime_string_from_datetime_dict(date_forw, true).split(" ")[0]
+	start_time = start_time + Time.get_datetime_string_from_unix_time(unix_time_back, true).split(" ")[0]
+	stop_time = stop_time + Time.get_datetime_string_from_unix_time(unix_time_forw, true).split(" ")[0]
 
 
 # Function that is called when an API request is completed, used to extract response body

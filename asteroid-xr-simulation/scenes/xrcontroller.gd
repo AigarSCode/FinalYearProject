@@ -5,6 +5,8 @@ extends XRController3D
 @onready var datePickerUI = get_node("/root/Node3D/DatePicker")
 @onready var earth = get_node("/root/Node3D/Earth")
 
+var buttonPressedLastFrame:bool = false
+
 func _ready() -> void:
 	pass
 
@@ -12,7 +14,7 @@ func _ready() -> void:
 # Update the visible part of the Ray Cast
 func _process(_delta: float) -> void:
 	var triggerPressed = is_button_pressed("trigger")
-	var gripPressed = is_button_pressed("trigger")
+	var gripPressed = is_button_pressed("grip")
 	
 	# If the ray hits something, the length of the visible mesh needs to be updated
 	if ray.is_colliding():
@@ -27,32 +29,33 @@ func _process(_delta: float) -> void:
 	if ray.is_colliding():
 		var objectHit = ray.get_collider()
 		
-		# Clicks for Tabs in Info Box
-		if objectHit.name in ["TabButton1", "TabButton2", "TabButton3"]:
-			if triggerPressed or gripPressed:
+		# Run only once if the action button is being held down
+		if (triggerPressed or gripPressed) and not buttonPressedLastFrame:
+			# Clicks for Tabs in Info Box
+			if objectHit.name in ["TabButton1", "TabButton2", "TabButton3"]:
 				var infoBox = objectHit.get_parent()
 				infoBox.switchTab(objectHit.name)
-				
-		# Asteroid Clicks
-		elif objectHit.name.contains("asteroid"):
-			print("Asteroid CLICK: " + objectHit.name)
-			if triggerPressed or gripPressed:
+					
+			# Asteroid Clicks
+			elif objectHit.name.contains("asteroid"):
+				print("Asteroid CLICK: " + objectHit.name)
 				objectHit.createInfoBox()
-				
-		# Speed button Clicks
-		elif objectHit.name in ["Button1x", "Button2x", "Button3x", "Button0_5x", "Button0_3x"]:
-			if triggerPressed or gripPressed:
+			
+			# Speed button Clicks
+			elif objectHit.name in ["Button1x", "Button2x", "Button3x", "Button0_5x", "Button0_3x"]:
 				objectHit.switchSpeed(objectHit.name)
-		
-		elif objectHit.get_parent().name == "DatePicker":
-			if triggerPressed or gripPressed:
+			
+			elif objectHit.get_parent().name == "DatePicker":
 				datePickerOptions(objectHit.name)
+	
+	# Used to control clicks, introduces single click and fixes issue of continuous press
+	buttonPressedLastFrame = triggerPressed or gripPressed
 
 
 # Handler for each Date Picker UI button 
 func datePickerOptions(objectHitName) -> void:
-	if objectHitName == "DateUp": datePickerUI.incrementDates("day")
-	if objectHitName == "DateDown": datePickerUI.decrementDates("day")
+	if objectHitName == "DayUp": datePickerUI.incrementDates("day")
+	if objectHitName == "DayDown": datePickerUI.decrementDates("day")
 	if objectHitName == "MonthUp": datePickerUI.incrementDates("month")
 	if objectHitName == "MonthDown": datePickerUI.decrementDates("month")
 	if objectHitName == "YearUp": datePickerUI.incrementDates("year")

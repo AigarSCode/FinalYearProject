@@ -43,7 +43,7 @@ transform = Transform3D(0.869788, 2.15683e-08, -0.493426, 0.493426, -3.80196e-08
 environment = SubResource("Environment_ldj8n")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -4.5, -1.5, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3, -1.5, 0)
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 
@@ -74,18 +74,18 @@ skeleton = NodePath("../../LeftHand")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1.5)
 
 [node name="DateBox" parent="." instance=ExtResource("6_1jq6i")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1.09551, 0.5, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1.096, 0.75, 0)
 
 [node name="LoadingBox" parent="." instance=ExtResource("7_al2iq")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1.09551, 0, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1, 0, 0)
 
 [node name="SpeedBox" parent="." instance=ExtResource("8_dmtm4")]
-transform = Transform3D(-1.31134e-07, 0, -3, 0, 3, 0, 3, 0, -1.31134e-07, -1.09551, -0.4, 0)
+transform = Transform3D(-1.31134e-07, 0, -3, 0, 3, 0, 3, 0, -1.31134e-07, -1.096, -0.5, 0)
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("9_2n1xb")
 
 [node name="DatePicker" parent="." instance=ExtResource("9_1xypn")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2, 0, -1.5)
+transform = Transform3D(-6.55671e-08, 0, -1.5, 0, 1.5, 0, 1.5, 0, -6.55671e-08, -2, 0, -1.5)
 
 [editable path="SpeedBox"]

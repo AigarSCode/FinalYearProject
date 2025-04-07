@@ -17,7 +17,7 @@ var numberOfAsteroids:int = 0
 var numberOfReadyAsteroids:int = 0
 
 # Get todays date
-var date = Time.get_date_string_from_system()
+var date:String
 var start_date:String
 var stop_date:String
 var current_date
@@ -39,6 +39,8 @@ var httprequestNode:HTTPRequest
 
 
 func _ready() -> void:
+	date = Time.get_date_string_from_system()
+	
 	# Set date range
 	current_date_counter = 0
 	set_date_range(date)
@@ -107,6 +109,7 @@ func create_asteroids() -> void:
 		# Instantiate Asteroid Scene
 		var asteroidInstance = asteroidScene.instantiate()
 		asteroidInstance.name = "asteroid_" + str(numberOfAsteroids)
+		asteroidInstance.date = date
 		
 		# Connect asteroid ready signal for movement
 		asteroidInstance.connect("initComplete", Callable(self, "_on_asteroid_init_completed"))
@@ -212,6 +215,7 @@ func resetAsteroidVariables() -> void:
 	numberOfAsteroids = 0
 	numberOfReadyAsteroids = 0
 	current_date_counter = 0
+	date_range_strings.clear()
 
 
 # Search for new asteroids using a User selected Date
@@ -239,11 +243,11 @@ func searchUserDate(userDate) -> void:
 # Set the date range, "date_range" days back and forward
 func set_date_range(setDate) -> void:
 	var date_back = setDate
-	var date_forw = date_back.duplicate(true)
+	var date_forw = date_back
 	
 	# Date needs to be converted to unix time before being able to add 7 days and take away 7 days
-	var unix_time_back = Time.get_unix_time_from_datetime_dict(date_back) - (date_range * 86400)
-	var unix_time_forw = Time.get_unix_time_from_datetime_dict(date_forw) + (date_range * 86400)
+	var unix_time_back = Time.get_unix_time_from_datetime_string(date_back) - (date_range * 86400)
+	var unix_time_forw = Time.get_unix_time_from_datetime_string(date_forw) + (date_range * 86400)
 	
 	# Get only the date part (YYYY-MM-DD) of the datetime_string (YYYY-MM-DD HH:MM:SS)
 	start_date = Time.get_datetime_string_from_unix_time(unix_time_back, true).split(" ")[0]
