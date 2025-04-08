@@ -33,7 +33,7 @@ var arrayZ:Array = []
 # Scaling value for the distances adjusted for user experience
 var scaleVal:int
 var globalScaleVal:float = 1.0
-var worldScaleVal:float = 5.0
+var worldScaleVal:float = 4.0
 
 # Positions for start and target
 var start_pos:Vector3
@@ -54,7 +54,6 @@ var elapsed_time:float = 0.0
 var i:int = 0
 
 var init_complete:bool = false
-var is_paused:bool = false
 var ui_ready:bool = false
 signal initComplete
 
@@ -89,7 +88,8 @@ func _ready() -> void:
 	make_api_request(api_horizons)
 
 
-func _process(delta):
+func _process(_delta):
+	# Move Asteroid Info UI to the UI marker
 	if displayingUI:
 		infoBoxInstance.global_position = asteroidInfoMarker.global_position
 
@@ -175,7 +175,6 @@ func set_date_range() -> void:
 func _http_request_completed(result, _response_code, _headers, body) -> void:
 	var json = JSON.new()
 	json.parse(body.get_string_from_utf8())
-	#print("JSON for ID: " + str(asteroidNeoWsID) + " is: " + str(json.data))
 	# Extract the Result of the Query (Contains the Vector Table)
 	
 	if init_complete:
@@ -194,8 +193,6 @@ func extract_vector_table_elements() -> void:
 	vector_table = vector_table[1].split("$$EOE")
 	# Keep only the vector table
 	vector_table = vector_table[0]
-	
-	#print("Vector Table is:", vector_table)
 	
 	extract_xyz_coordinates()
 
@@ -254,7 +251,7 @@ func extract_xyz_coordinates() -> void:
 			arrayZ.append(float(coordinates[zPos + 1].split("=")[1]))
 	
 	
-	# Scaling Asteroids to fit into a smaller area, set by worldScaleVal e.g. 5m max distance
+	# Scaling Asteroids to fit into a smaller area, set by worldScaleVal e.g. 4m max distance
 	# Scale each value and check for largest distance
 	var longestDist = 0.0
 	for j in range(arrayX.size()):

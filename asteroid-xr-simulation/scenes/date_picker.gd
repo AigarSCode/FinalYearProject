@@ -27,10 +27,6 @@ func _process(delta: float) -> void:
 
 # Increment for day, month and year. (Function called from XRControllers)
 func incrementDates(option) -> void:
-	print("Option is: " + option)
-	print("Day is: " + str(day))
-	print("Month is: " + str(months[month]))
-	print("Year is: " + str(year))
 	if option == "day":
 		day += 1
 		if month == 1 and year % 4 == 0:

@@ -73,21 +73,21 @@ mesh = SubResource("CylinderMesh_dmtm4")
 skeleton = NodePath("../../LeftHand")
 
 [node name="AsteroidInfoUIMarker" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 1.5)
 
 [node name="DateBox" parent="." instance=ExtResource("6_1jq6i")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1.096, 0.75, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.75, 0)
 
 [node name="LoadingBox" parent="." instance=ExtResource("7_al2iq")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1, 0, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.75, 0, 0)
 
 [node name="SpeedBox" parent="." instance=ExtResource("8_dmtm4")]
-transform = Transform3D(-1.31134e-07, 0, -3, 0, 3, 0, 3, 0, -1.31134e-07, -1.096, -0.5, 0)
+transform = Transform3D(-1.31134e-07, 0, -3, 0, 3, 0, 3, 0, -1.31134e-07, -0.75, -0.5, 0)
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("9_2n1xb")
 
 [node name="DatePicker" parent="." instance=ExtResource("9_1xypn")]
-transform = Transform3D(-6.55671e-08, 0, -1.5, 0, 1.5, 0, 1.5, 0, -6.55671e-08, -2, 0, -1.5)
+transform = Transform3D(-6.55671e-08, 0, -1.5, 0, 1.5, 0, 1.5, 0, -6.55671e-08, -1.5, 0, -1.5)
 
 [editable path="SpeedBox"]

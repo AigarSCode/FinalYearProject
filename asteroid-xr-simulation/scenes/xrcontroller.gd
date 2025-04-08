@@ -38,7 +38,7 @@ func _process(_delta: float) -> void:
 					
 			# Asteroid Clicks
 			elif objectHit.name.contains("asteroid"):
-				print("Asteroid CLICK: " + objectHit.name)
+				earth.closeOtherAsteroidInfoUI(objectHit)
 				objectHit.createInfoBox()
 			
 			# Speed button Clicks

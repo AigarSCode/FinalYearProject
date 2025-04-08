@@ -20,15 +20,15 @@ var numberOfReadyAsteroids:int = 0
 var date:String
 var start_date:String
 var stop_date:String
-var current_date
-var current_date_counter
+var current_date:String
+var current_date_counter:int
 var date_range_strings:Array
 var start_movement:bool = false
 var date_searchable:bool = true
 @onready var dateBoxScene = $"../DateBox"
 # Days forward and backward in the simulation
-var date_range = 7
-var total_date_range = 15
+var date_range:int = 7
+var total_date_range:int = 15
 
 var simTimeFrame:float = 1.0
 var elapsed_time:float = 0.0
@@ -85,7 +85,7 @@ func _http_request_completed(_result, _response_code, _headers, body) -> void:
 	
 	# Parsing API response
 	if (api_response.element_count <= 0):
-		print("Number of asteroids is 0 or less")
+		print("Number of asteroids is 0")
 	else:
 		asteroidList = api_response["near_earth_objects"][date]
 		for asteroid in asteroidList:
@@ -99,7 +99,6 @@ func create_api_request() -> void:
 	var start_date = "&start_date=" + str(date)
 	var end_date = "&end_date=" + str(date)
 	neows_request = neows_base_request + start_date + end_date
-	print("****** NEOWs Request is: " + str(neows_request))
 
 
 # Function instantiates x number of asteroids from the NEoWs API response 
@@ -148,7 +147,6 @@ func create_asteroids() -> void:
 		asteroidInstance.missDistAU = close_approach_data["miss_distance"]["astronomical"]
 		
 		asteroidInstances.append(asteroidInstance)
-		
 		add_child(asteroidInstance)
 		
 		# Wait before sending another request
@@ -277,3 +275,12 @@ func update_current_date() -> void:
 # Change Sim Speed, set by SpeedBox UI
 func changeSpeed(speed) -> void:
 	simSpeed = speed
+
+
+# Check if an asteroid has an info UI open and close it
+func closeOtherAsteroidInfoUI(objectHit) -> void:
+	for asteroid in asteroidInstances:
+		if objectHit == asteroid:
+			pass
+		elif asteroid.displayingUI:
+			asteroid.displayInfoBox()
