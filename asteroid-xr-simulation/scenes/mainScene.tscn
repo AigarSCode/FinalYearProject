@@ -16,6 +16,8 @@ albedo_texture = ExtResource("2_w16ng")
 
 [sub_resource type="SphereMesh" id="SphereMesh_1pxj5"]
 material = SubResource("StandardMaterial3D_1jq6i")
+radius = 0.25
+height = 0.5
 
 [sub_resource type="Environment" id="Environment_ldj8n"]
 background_color = Color(0.646029, 0.646029, 0.646029, 1)

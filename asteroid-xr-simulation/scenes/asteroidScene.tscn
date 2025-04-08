@@ -4,12 +4,12 @@
 [ext_resource type="Material" uid="uid://efphtpl7eubk" path="res://materials/moonMaterial.tres" id="2_4hbyb"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_8v4dh"]
-radius = 0.25
+radius = 0.1
 
 [sub_resource type="SphereMesh" id="SphereMesh_gpmln"]
 material = ExtResource("2_4hbyb")
-radius = 0.25
-height = 0.5
+radius = 0.1
+height = 0.2
 
 [node name="Asteroid" type="StaticBody3D"]
 script = ExtResource("1_8v4dh")

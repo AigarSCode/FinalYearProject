@@ -32,6 +32,8 @@ var arrayZ:Array = []
 
 # Scaling value for the distances adjusted for user experience
 var scaleVal:int
+var globalScaleVal:float = 1.0
+var worldScaleVal:float = 5.0
 
 # Positions for start and target
 var start_pos:Vector3
@@ -94,13 +96,13 @@ func _process(delta):
 
 # Calculate and return a Vector3 for a position
 func calculate_target_vector():
-	return Vector3((arrayX[i] / scaleVal), (arrayY[i] / scaleVal), (arrayZ[i] / scaleVal))
+	return Vector3(arrayX[i], arrayY[i], arrayZ[i])
 
 
 # Move asteroid to the next point
 func move_asteroid(weight) -> void:
 	if i == 0:
-		global_position = Vector3((arrayX[0] / scaleVal), (arrayY[0] / scaleVal), (arrayZ[0] / scaleVal))
+		global_position = Vector3(arrayX[0], arrayY[0], arrayZ[0])
 	else:
 		# Movement Smoothing using the Smoothstep formula for ease in and out, chosen for better viewing
 		var smooth_weight = weight * weight * (3.0 - 2.0 * weight)
@@ -219,6 +221,7 @@ func extract_xyz_coordinates() -> void:
 		scaleVal = 150000000
 	
 	
+	# Extract X, Y and Z values
 	for i in range(2, row.size(), 2):
 		var xPos
 		var yPos
@@ -249,6 +252,29 @@ func extract_xyz_coordinates() -> void:
 			arrayZ.append(float(coordinates[zPos + 2]))
 		elif (coordinates[zPos + 1].contains("E+")):
 			arrayZ.append(float(coordinates[zPos + 1].split("=")[1]))
+	
+	
+	# Scaling Asteroids to fit into a smaller area, set by worldScaleVal e.g. 5m max distance
+	# Scale each value and check for largest distance
+	var longestDist = 0.0
+	for j in range(arrayX.size()):
+		var scaledVector = Vector3(arrayX[j], arrayY[j], arrayZ[j]) / scaleVal
+		var dist = scaledVector.length()
+		if dist > longestDist:
+			longestDist = dist
+	
+	# Set global scale if value is too large
+	if longestDist > worldScaleVal:
+		globalScaleVal = worldScaleVal / longestDist
+	else:
+		globalScaleVal = 1.0
+	
+	# Apply scaling val and global value to get values less than worldScaleVal, extract xyz and replace original values
+	for j in range(arrayX.size()):
+		var scaledVector = Vector3(arrayX[j], arrayY[j], arrayZ[j]) / scaleVal * globalScaleVal
+		arrayX[j] = scaledVector.x
+		arrayY[j] = scaledVector.y
+		arrayZ[j] = scaledVector.z
 	
 	init_elements()
 
