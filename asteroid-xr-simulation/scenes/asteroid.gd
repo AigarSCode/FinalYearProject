@@ -71,7 +71,8 @@ var date:String
 var date_range:int = 7
 var start_time:String
 var stop_time:String
-
+#var durationSinceRequest
+#var timeTakenForRequest
 
 func _ready() -> void:
 	# Nasa Horizons API request for asteroid position
@@ -149,6 +150,7 @@ func create_api_request() -> void:
 
 
 func make_api_request(request_url):
+	#durationSinceRequest = Time.get_ticks_msec()
 	var error = httprequestNode.request(request_url)
 	if error != OK:
 		print("Request Failed with error: " + str(error))
@@ -170,6 +172,7 @@ func set_date_range() -> void:
 
 # Function that is called when an API request is completed, used to extract response body
 func _http_request_completed(result, _response_code, _headers, body) -> void:
+	#timeTakenForRequest = (Time.get_ticks_msec() - durationSinceRequest) / 1000.0
 	var json = JSON.new()
 	var error = json.parse(body.get_string_from_utf8())
 	# Extract the Result of the Query (Contains the Vector Table)

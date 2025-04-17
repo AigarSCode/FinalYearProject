@@ -180,6 +180,10 @@ func _on_asteroid_init_completed() -> void:
 	numberOfReadyAsteroids += 1
 	
 	if numberOfReadyAsteroids == numberOfAsteroids:
+		#var timesForAPI = []
+		#for asteroid in asteroidInstances:
+			#timesForAPI.append(asteroid.timeTakenForRequest)
+		#print(timesForAPI)
 		start_movement = true
 		date_searchable = true
 		
