@@ -35,7 +35,7 @@ func _process(_delta: float) -> void:
 			if objectHit.name in ["TabButton1", "TabButton2", "TabButton3"]:
 				var infoBox = objectHit.get_parent()
 				infoBox.switchTab(objectHit.name)
-					
+				
 			# Asteroid Clicks
 			elif objectHit.name.contains("asteroid"):
 				earth.closeOtherAsteroidInfoUI(objectHit)

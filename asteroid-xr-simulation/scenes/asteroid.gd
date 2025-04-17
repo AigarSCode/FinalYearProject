@@ -61,30 +61,25 @@ signal initComplete
 var total_time:float = 0
 
 var httprequestNode:HTTPRequest
-var sbdb_base_request = "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr="
+var sbdb_base_request:String = "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr="
 var api_horizons
 var api_response
 var vector_table
 
 var date:String
 # Days forward and backward in the simulation
-var date_range = 7
-var start_time
-var stop_time
+var date_range:int = 7
+var start_time:String
+var stop_time:String
 
 
 func _ready() -> void:
-	print("Asteroid Created with ID: " + str(asteroidID) + " and name: " + asteroidName)
-	
 	# Nasa Horizons API request for asteroid position
 	httprequestNode = HTTPRequest.new()
 	add_child(httprequestNode)
 	httprequestNode.request_completed.connect(self._http_request_completed)
 	
 	create_api_request()
-	
-	print("Asteroid ID: " + str(asteroidNeoWsID) + " has query: " + api_horizons)
-	
 	make_api_request(api_horizons)
 
 
@@ -148,7 +143,9 @@ func create_api_request() -> void:
 	set_date_range()
 	
 	# Make final API string
-	api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='" + asteroidDESID + "'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&STEP_SIZE='1d'&QUANTITIES='1'&VEC_TABLE='1'" + start_time + stop_time
+	api_horizons = "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='" + asteroidDESID 
+	api_horizons += "'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&STEP_SIZE='1d'&QUANTITIES='1'&VEC_TABLE='1'" 
+	api_horizons += start_time + stop_time
 
 
 func make_api_request(request_url):
@@ -174,15 +171,15 @@ func set_date_range() -> void:
 # Function that is called when an API request is completed, used to extract response body
 func _http_request_completed(result, _response_code, _headers, body) -> void:
 	var json = JSON.new()
-	json.parse(body.get_string_from_utf8())
+	var error = json.parse(body.get_string_from_utf8())
 	# Extract the Result of the Query (Contains the Vector Table)
-	
-	if init_complete:
-		api_response = json.get_data()
-		extract_asteroid_orbital_data(api_response)
-	else:
-		api_response = json.get_data().result
-		extract_vector_table_elements()
+	if error == OK:
+		if init_complete:
+			api_response = json.get_data()
+			extract_asteroid_orbital_data(api_response)
+		else:
+			api_response = json.get_data().result
+			extract_vector_table_elements()
 
 
 # Taking the Result of the Query and extracting the Vector Table only
@@ -227,7 +224,7 @@ func extract_xyz_coordinates() -> void:
 		
 		# The following handles positive and negative XYZ values since positive is X = 1.234 and negative is X =-1.234
 		# The previous implementation of split will split negative into ['X', '=-1.234'] causing an error
-		# New Implementation finds the index of each element and take the next value or the one after
+		# New Implementation finds the index of each element and takes the next value or the one after
 		
 		# X
 		xPos = coordinates.find("X")

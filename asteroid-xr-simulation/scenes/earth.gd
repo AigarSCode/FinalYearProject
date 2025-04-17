@@ -37,9 +37,16 @@ var simSpeed:float = 1.0
 # HTTPRequest Node for API calls
 var httprequestNode:HTTPRequest
 
+# Loading Box
+@onready var loadingBox = $"../LoadingBox"
+@onready var loadingBoxText = $"../LoadingBox/Label3D"
+@onready var loadingBoxMesh
+
 
 func _ready() -> void:
 	date = Time.get_date_string_from_system()
+	var loadingBoxMeshInstance = $"../LoadingBox/MeshInstance3D"
+	loadingBoxMesh = loadingBoxMeshInstance.mesh
 	
 	# Set date range
 	current_date_counter = 0
@@ -80,18 +87,20 @@ func make_api_request():
 # API Response handling function
 func _http_request_completed(_result, _response_code, _headers, body) -> void:
 	var json = JSON.new()
-	json.parse(body.get_string_from_utf8())
-	api_response = json.get_data()
-	
-	# Parsing API response
-	if (api_response.element_count <= 0):
-		print("Number of asteroids is 0")
+	var error = json.parse(body.get_string_from_utf8())
+	if error == OK:
+		api_response = json.get_data()
+		
+		# Parsing API response
+		if (api_response.element_count <= 0):
+			loadingBoxText = "No Asteroids found. Please Restart or Try Again"
+			loadingBoxMesh.size.x = 9.75
+		else:
+			asteroidList = api_response["near_earth_objects"][date]
+			create_asteroids()
 	else:
-		asteroidList = api_response["near_earth_objects"][date]
-		for asteroid in asteroidList:
-			print("Asteroid: " + asteroid.name + " with ID: " + asteroid.id)
-	
-	create_asteroids()
+		loadingBoxText = "Error Occurred, Please Restart or Try Again"
+		loadingBoxMesh.size.x = 9.75
 
 
 func create_api_request() -> void:
@@ -175,7 +184,7 @@ func _on_asteroid_init_completed() -> void:
 		date_searchable = true
 		
 		# Hide loading box
-		$"../LoadingBox".visible = false
+		loadingBox.visible = false
 
 
 # Set a Random Texture to the asteroid instance
@@ -207,7 +216,9 @@ func resetAsteroidVariables() -> void:
 	elapsed_time = 0.0
 	
 	# Loading Box
-	$"../LoadingBox".visible = true
+	loadingBox.visible = true
+	loadingBoxText = "Loading . . ."
+	loadingBoxMesh.size.x = 0.9
 	
 	# Counters for Asteroid and Date
 	numberOfAsteroids = 0
@@ -233,9 +244,6 @@ func searchUserDate(userDate) -> void:
 		# Run API url creation and Send request
 		create_api_request()
 		make_api_request()
-		
-		# Create asteroids with returned data
-		create_asteroids()
 
 
 # Set the date range, "date_range" days back and forward

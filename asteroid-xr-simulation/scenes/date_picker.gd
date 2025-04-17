@@ -2,7 +2,8 @@ extends StaticBody3D
 
 @onready var user = get_node("/root/Node3D/XROrigin3D/XRCamera3D")
 
-var months:Array = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+var months:Array = ["January", "February", "March", "April", "May", "June", "July", 
+					"August", "September", "October", "November", "December"]
 var daysInMonth:Array = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 var day:int = 1
 var month:int = 0

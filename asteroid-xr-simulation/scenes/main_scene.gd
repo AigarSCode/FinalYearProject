@@ -19,10 +19,6 @@ func init_XR() -> void:
 		# Turn off v-sync!
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 		
-		# Check supported blend modes
-		var xr_modes = xr_interface.get_supported_environment_blend_modes()
-		print("Supported blend modes: ", xr_modes)
-		
 		# Change our main viewport to output to the HMD
 		get_viewport().use_xr = true
 		var modes = xr_interface.get_supported_environment_blend_modes()
